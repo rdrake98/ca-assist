@@ -19,12 +19,13 @@
 /**
 * @package Climate Audit Assistant
 * @Copyright ClimateAudit.org 2009+. All right reserved
-* @authors: MrPete
+* @authors: MrPete and friends
 * @created: January 8, 2010
-* @version 0.0.9
+* @version 0.1
 * @credits: Inspired by Mafia Wars Autoplayer script and more
 *
 * History:
+* 0.1 Use jQuery 2.0.3
 * 0.0.9 Support new Lucia version.
 * 0.0.8 All Open Science Blog Ring sites now should work. Comment reorder now optional. Many bugfixes.
 */
@@ -34,10 +35,10 @@
 //
 
 // ==UserScript==
-// @name        CA Assistant, Open Science webring edition
+// @name        ca-assist
 // @namespace   ca-assist
 // @description Enhances user experience on Open Science Web Ring courtesy of Climate Audit
-// @copyright   2009+, MrPete (http://www.ClimateAudit.org) All right reserved
+// @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
 // @include     http://www.climateaudit.org/*
@@ -46,19 +47,17 @@
 // @include     http://rankexploits.com/musings/*
 // @include     http://wattsupwiththat.com/*
 // @include     http://danhughes.auditblogs.com/*
-// @include     http://localhost/*
-// @version     0.0.9
-// @require		     http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
-// @require        http://www.climateaudit.info/ca-assist/jquery.ba-untils.min.js
-// @require        http://www.climateaudit.info/ca-assist/ca-assist-comment.js
+// @version     0.1
+// @require     http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js
+// @require     https://raw.github.com/rdrake98/ca-assist/master/ca-assist-comment.js
 // ==/UserScript==
 var $j = jQuery.noConflict();
 
 
 var SCRIPT = { // URL of the script for updates
-  url: 'http://climateaudit.info/ca-assist/ca-assist.user.js',
-  version: '0.0.9',
-  build: '41',
+  url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
+  version: '0.1',
+  build: '42',
   ajaxPage: 'inner2',
 };
 
