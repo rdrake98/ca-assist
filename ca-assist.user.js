@@ -267,6 +267,8 @@ if (bReorgRcntCmt) {
 /////////////////////////////////////////////////////////////////
 
 
+console.log(cmtForm.listID)
+console.log($j(cmtForm.listID).length)
 DEBUG('Initial site-dependent comment page prep');
 if (!$j(cmtForm.listID).length) { // don't waste time on non-comment pages
 	DEBUG('Not a comment page');
@@ -477,6 +479,8 @@ function FixComment(i) {
 
 
 function setupComments() {
+  console.log(cmtForm.listElm)
+  console.log($j(cmtForm.listElm).length)
 	setAgeValues();
 	if (siteType=='WUWT') {
 		setWUWTpairs();
