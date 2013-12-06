@@ -63,7 +63,6 @@ var SCRIPT = { // URL of the script for updates
 };
 
 // Register debugOnOff, etc with Greasemonkey (for later)
-GM_registerMenuCommand('CA Assistant - Turn Debugging Log On/Off', debugOnOff);
 GM_registerMenuCommand('CA Assistant - Clear Saved Values', function() { clearSettings(); loadHome(); });
 
 function loadHome() {}
@@ -303,7 +302,7 @@ var redBgImage =    '<img src="' +
                     'VPgmo6yo+McigbHi8ttkwx05c1QxUH1Cx7clB294NznK9aDiZeL5xMzZA7PohOzkHWPYzMPjEO5gt7rELe5DxqPxhkYnZyQnWHU+sZ5QwvwhGNfII9mj8FOX+UNnQvNZRfwx8p07F+Q65+12EV705ITEks1xOimR' +
                     'E12G8GwiPU8oSD/ysZ3nhmofla7Vps4J74b0O9ZF2XU5+duqbcwjW8/OyYP+9Z5BLI0IAAA7' +
                     '" />';
-var autoLog = true;
+
 var isNew = 8;     // a "new" comment is less than 8 hours ago
 var isOld = 24;			// an "old" comment is more than 48 hours (values are NOT the official defaults; just set her temporarily)
 var bShowThreads = 1; // default: do show threads
@@ -775,148 +774,10 @@ function customizeMasthead() {
 // ********************************************************************
 
 
-function debugOnOff() {
-  var debugElt = document.getElementById('wpa_debug_log');
-
-  if (isChecked('enableDebug')) {
-    addToLog('info Icon', 'Debug logging disabled.');
-    GM_setValue('enableDebug', 0);
-    debug = false;
-    if (GM_getValue('logOpen') != 'open') {
-      alert('Debug logging disabled.');
-    } else {
-      if (debugElt) debugElt.style.color = 'rgb(100, 0, 0)';
-    }
-  } else {
-    GM_setValue('enableDebug', 'checked');
-    debug = true;
-    //showLogBox();
-    addToLog('info Icon', 'Debug logging enabled.');
-    if (debugElt) debugElt.style.color = 'rgb(255, 0, 0)';
-
-    debugDumpSettings();
-  }
-}
-
 function DEBUG(line, level) {
   var level = (level == null) ? 0 : level;
-  if (debug) {
-    addToLog('info Icon', line);
-    GM_log(line, level);
-  }
 }
   
-function isLoggable(line) { return 1; } // maybe someday
-
-function addToLog(icon, line) {
-  if (!debug && !isChecked('autoLog')) {
-    return;
-  }
-  // Do not log anything if log filter condition is met
-  if (!isLoggable(line)) {
-    return;
-  }
-
-  // Create a datestamp, formatted for the log.
-  var currentTime = new Date();
-  var m_names = new Array('Jan', 'Feb', 'Mar',
-    'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-    'Oct', 'Nov', 'Dec');
-  var timestampdate = m_names[currentTime.getMonth()] + ' ' + currentTime.getDate();
-
-  // Create a timestamp, formatted for the log.
-  var hours = currentTime.getHours();
-  if (hours >= 12) {
-    hours = hours - 12;
-    var ampm = ' PM';
-  } else {
-    var ampm = ' AM';
-  }
-  if (hours == 0) {
-    hours = 12;
-  }
-  var timestamptime = hours + ':' +
-    (currentTime.getMinutes() < 10 ? 0 : '') +
-    currentTime.getMinutes() + ':' +
-    (currentTime.getSeconds() < 10 ? 0 : '') +
-    currentTime.getSeconds() +
-    ampm;
-
-  // Get a log box to work with.
-  var logBox = document.getElementById('logBox');
-  if (!logBox) {
-    if (!addToLog.logBox) {
-      // There's no log box, so create one.
-      addToLog.logBox = document.createElement('div');
-      addToLog.logBox.innerHTML = GM_getValue('itemLog', '');
-    }
-    logBox = addToLog.logBox;
-  }
-  var logLen = logBox.childNodes.length;
-
-  // Determine whether the new line repeats the most recent one.
-  var repeatCount;
-if (!logLen) console.log("No logLEN!!");
-  if (logLen) {
-    var elt = logBox.firstChild.childNodes[1];
-    if (elt && ((elt.innerHTML).untag()).indexOf(((line).untag())) == 0) {
-      if (elt.innerHTML.match(/\((\d+) times\)$/)) {
-        repeatCount = parseInt(RegExp.$1) + 1;
-      } else {
-        repeatCount = 2;
-      }
-      line += ' (' + repeatCount + ' times)';
-    }
-  }
-
-  // Create the new log entry.
-  var lineToAdd = document.createElement('div');
-  lineToAdd.className = 'logEvent ' + icon;
-  lineToAdd.innerHTML = '<div class="eventTime">' + timestampdate + '<br/>' +
-                        timestamptime + '</div><div class="eventBody">' +
-                        line + '</div><div class="clear"></div>';
-  // Put it in the log box.
-  if (repeatCount) {
-    logBox.replaceChild(lineToAdd, logBox.firstChild);
-  } else {
-    logBox.insertBefore(lineToAdd, logBox.firstChild);
-
-    // If the log is too large, trim it down.
-    var logMax = parseInt(GM_getValue('autoLogLength', 300));
-    //GM_log('logLen=' + logLen + ', logMax=' + logMax);
-    if (logMax > 0) {
-      while (logLen-- > logMax) {
-        logBox.removeChild(logBox.lastChild);
-      }
-    }
-  }
-//console.log('atl save');
-
-  // Save the log.
-  GM_setValue('itemLog', logBox.innerHTML);
-}
-
-function debugDumpSettings() {
-  // Use showIfUnchecked() to show 0 value as "un-checked", or showIfSelected()
-  // to show 0 value as "not selected" (for radio buttons).
-
-  DEBUG('[code]>  >  >  >  >  BEGIN SETTINGS DUMP  <  <  <  <  <<br>' +
-        'Script Version: <strong>' + SCRIPT.version + ' build ' + SCRIPT.build + '</strong><br>' +
-        'Language: <strong>' + document.documentElement.lang + '</strong><br>' +
-        '-------------------General Tab-------------------<br>' +
-				'New comments (hrs): <strong>' + GM_getValue('isNew') + '</strong><br>' +        
-				'Old comments (hrs): <strong>' + GM_getValue('isOld') + '</strong><br>' +        
-        'Comment coloring: <strong>' + showIfUnchecked(GM_getValue('bColorAge'))+ '</strong><br>' +
-        'Comment hiding: <strong>' + showIfUnchecked(GM_getValue('bHideOld'))+ '</strong><br>' +
-        'Threaded display: <strong>' + showIfUnchecked(GM_getValue('bShowThreads'))+ '</strong><br>' +
-        'Most-recent last: <strong>' + showIfUnchecked(GM_getValue('bRecentLast'))+ '</strong><br>' +
-        'Reorganize Recent Comments: <strong>' + showIfUnchecked(GM_getValue('bReorgRcntCmt'))+ '</strong><br>' +
-        '---------------------Display Tab--------------------<br>' +
-        'Enable logging: <strong>' + showIfUnchecked(GM_getValue('autoLog')) + '</strong><br>' +
-        '&nbsp;&nbsp;-Logging length: <strong>' + GM_getValue('autoLogLength') + '</strong><br>' +
-        '>  >  >  >  >  END SETTINGS DUMP  <  <  <  <  <[/code]');
-}
-
 function showIfUnchecked(setting) {
   if (setting == '0') {
     setting = 'unchecked';
@@ -932,6 +793,7 @@ function showIfSelected(setting) {
   }
   return setting;
 }
+
 function stripURI(img) {
   img = img.split('"')[1];
   return img.replace('" />', '');
@@ -1150,9 +1012,6 @@ function saveDefaultSettings() {
   // For checkboxes, no need to default if the option should be off.
 
   // General tab.
-  GM_setValue('autoLog', 'checked');
-  GM_setValue('autoLogLength', '300');
-  GM_setValue('enableDebug','checked');
 
 	GM_setValue('isNew', '8');
 	GM_setValue('isOld', '24');
@@ -1163,11 +1022,6 @@ function saveDefaultSettings() {
 	GM_setValue("bEnableOrder",'checked');
 	GM_setValue("bReorgRcntCmt",'checked');
 
-
-  // Other settings.
-  GM_setValue('logOpen', 'open');
-
-  addToLog('process Icon', 'Options reset to defaults.');
 }
 
 function helpSettings() {
@@ -1188,7 +1042,6 @@ function helpSettings() {
 
 function saveSettings() {
 	
-	autoLog      = (document.getElementById('autoLog').checked === true);
 	bColorAge      = (document.getElementById('bColorAge').checked === true);
 	bHideOld      = (document.getElementById('bHideOld').checked === true);
 	bShowThreads      = (document.getElementById('bShowThreads').checked === true);
@@ -1200,13 +1053,12 @@ function saveSettings() {
 
   GM_setValue ('isNew', isNew);
   GM_setValue ('isOld', isOld);
-	saveCheckBoxElementArray(['autoLog','bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
+	saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
 
   toggleSettingsBox();
 }
 
 function refreshSettings() {
-	autoLog    = GM_getValue('autoLog','checked');
 	bColorAge    = GM_getValue('bColorAge','checked');
 	bHideOld     = GM_getValue('bHideOld','checked');
 	bShowThreads = GM_getValue('bShowThreads','checked');
@@ -1315,6 +1167,7 @@ function isSame (gmName, gmValue) {
 function isChecked (gmName) {
   return isSame (gmName, 'checked');
 }
+
 function clearSettings() {
   if (typeof GM_listValues == 'function' &&
       typeof GM_deleteValue == 'function') {
