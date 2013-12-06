@@ -1053,7 +1053,7 @@ function createSettingsBox() {
       '#settingsBox .fancy_button{position:absolute;background-image:url(' + stripURI(redBgImage) + ');border:1px solid #FFD927;color:#FFD927;cursor:pointer;display:block;float:left;font-size:14px;font-weight:700;padding:5px;text-decoration:none;width:auto}' +
       '#settingsBox .fancy_button button{background:transparent;border:medium none #FFF;color:#FFD927;cursor:pointer;font-size:14px;font-weight:700;margin:0}' +
       '#settingsBox .fancy_button button:hover{color:#BCD2EA;font-weight:700;text-decoration:none}' +
-      '#settingsBox .tabcontent{display:none;height:300px;top:60px;width:380px}' +
+      '#settingsBox .tabcontent{display:block;top:60px;bottom:60px;left:10px;right:10px;}' +
       '#settingsBox div,#settingsBox select,#settingsBox textarea{position:absolute}' +
       '#settingsBox label {font-weight: normal; color: #BCD2EA}' +
       '#settingsBox #generalTab div,  #commentsTab div ' +
@@ -1085,7 +1085,7 @@ function createSettingsBox() {
   var elt = makeElement('div', document.body, {'class':'generic_dialog pop_dialog', 'id':'wpa_settingsBox'});
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
-  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 600px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
+  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 480px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
   //End settings box
 
@@ -1150,7 +1150,7 @@ function createSettingsBox() {
 // Create General Tab
 function createGeneralTab() {
   var elt, title, id, label;
-  var generalTab = makeElement('div', null, {'id':'generalTab', 'class':'tabcontent', 'style':'width:380px;background: #003;display: block;'});
+  var generalTab = makeElement('div', null, {'id':'generalTab', 'class':'tabcontent', 'style':'width:380px;background: #003;'});
 
   // Container for a list of settings.
   var list = makeElement('div', generalTab, {'style':'position: relative; top: 10px; margin-left: auto; margin-right: auto; width: 98%; line-height:125%;'});
