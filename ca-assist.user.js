@@ -95,7 +95,6 @@ var siteType='CA'
 console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
-  case 'wattsupwiththat.com': siteType='WUWT'; break;
   case 'dev.livestation.com': 
     siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1); 
     break;
@@ -119,9 +118,6 @@ switch (siteType) {
 	case 'CE': cmtForm= { 'listID': '.commentlist','listElm':'#commentListOL li','hideElm':'',
 		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
 		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
-	case 'WUWT': cmtForm= { 'listID': 'dl.commentlist','listElm':'#commentListOL > div','hideElm':'',
-		'threadElm':'#commentListOL > div','bSeqDate':1,'topDiv':'#header','replyElm':'span.commentmetadata',
-		'authElm':'.comment-author:first','itemElm': 'dd.comment', 'dateText': 'span.commentmetadata', 'bHasReply':false }; break;
 };
 	
 function getCmtDate(txt) {
@@ -337,42 +333,6 @@ var sReplyTxt= cmtForm.bHasReply ? "Paste Link" : "Reply w/ Link";
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 //
-// WUWT wrap-pairs
-// Each comment is a pair of <dt><dd> elements. Wrap them in a div
-//
-function setWUWTpairs() {
-	
-	//var div = $j(cmtForm.listID).get (0);
-	
-	//console.log('get all dt in: '+cmtForm.listID);
-	$j("dt",cmtForm.listID).each(function(){
-		var sDate=$j(this).text();
-		//console.log('raw date:'+sDate);
-		sDate=sDate.replace(/(\d+)[\s\c]*(\d+)[\s\c]*(\d+)/,'$2/$1/$3').trim();
-		var dd=$j(this).next().get(0);
-//		console.log('dd type:'+dd.nodeName);
-		var sTime=$j('span.comment-meta > small',dd).text().replace(/[()]/g,'');
-		var sID = dd.id;
-		var wrapID='caa'+sID;
-		var cmtURL='#'+sID;
-	//	console.log('new date time:'+sDate+' '+sTime);
-	//	console.log('id:'+sID);
-		$j(this).add(dd).wrapAll('<div id="'+wrapID+'" class="caaWrap"></div>');
-	//	console.log('wrapped');
-		var elm=$j('#'+wrapID).get(0);
-		var cmtDate=new Date(sDate+' '+sTime);
-//		console.log(elm.nodeName);
-		cmtDates[wrapID]=cmtDate.valueOf();
-		if (isNaN(cmtDates[wrapID])) {
-			DEBUG('NaN: "'+cmtDateStr+'"');
-		}
-		$j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>');
-		if (bHideOld || bColorAge) AgeComment(elm);
-	});
-}
-
-
-//
 // ADD REPLY LINKS
 //
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -482,15 +442,9 @@ function setupComments() {
   console.log(cmtForm.listElm)
   console.log($j(cmtForm.listElm).length)
 	setAgeValues();
-	if (siteType=='WUWT') {
-		setWUWTpairs();
-	} else {
-		DEBUG('cmt setup');
-		//$j(cmtForm.listID).css("display","none"); // hide them all for a bit
-		//DEBUG('Comments hidden');
-		$j(cmtForm.listElm).each(FixComment);
-		DEBUG('Comments enhanced');
-	}	
+	//$j(cmtForm.listID).css("display","none"); // hide them all for a bit
+	//DEBUG('Comments hidden');
+	$j(cmtForm.listElm).each(FixComment);
 	
 	
   if (bEnableOrder) {
