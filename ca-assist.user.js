@@ -356,14 +356,7 @@ function pasteReplyLink() {
 	cmtElm=$j(cmtElm).parent(); // up one
 	var cmtURL='#'+cmtElm.attr('id');
 	var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
-	if (siteType=='WUWT') {
-		var sDate=$j('dt',cmtElm).text();
-		sDate=sDate.replace(/(\d+)[\s\c]*(\d+)[\s\c]*(\d+)/,'$2/$1/$3').trim();
-		var sTime=$j('dd span.comment-meta > small',cmtElm).text().replace(/[()]/g,'');
-		var cmtDateStr = sDate+' '+sTime;
-	} else {
-		var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
-	}
+	var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
 	var cmtDate = new Date(cmtDateStr);
 	var cmtM= months[cmtDate.getMonth()];
 	var cmtHr = cmtDate.getHours();
