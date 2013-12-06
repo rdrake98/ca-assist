@@ -47,6 +47,7 @@
 // @include     http://rankexploits.com/musings/*
 // @include     http://wattsupwiththat.com/*
 // @include     http://danhughes.auditblogs.com/*
+// @include     http://dev.livestation.com/climfit/*
 // @version     0.1
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js
 // @require     https://raw.github.com/rdrake98/ca-assist/master/ca-assist-comment.js
