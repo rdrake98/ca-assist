@@ -95,39 +95,14 @@ String.prototype.untag = function() {
 // Detect which website style we're assisting
 //
 var siteType='CA'; // assume CA
-//console.log('Testing site type');
-//console.log('host:'+location.hostname);
-var bFound=true;
+console.log('hostname: '+location.hostname)
 switch(location.hostname) {
-	case 'climateaudit.org':       siteType='CA';break;
-	case 'statpad.wordpress.com':  siteType='RomanM';break;
-	case 'wattsupwiththat.com':    siteType='WUWT';break;
-	case 'localhost':
-	case 'rankexploits.com':       siteType='Lucia';break;
-	case 'danhughes.auditblogs.com': siteType='DanH';break;
-	case 'noconsensus.wordpress.com':  siteType='JeffId';break;
-  default: // this only really works on a comment page...
-  	bFound=false;
-		if ($j('#comments-list').length) {
-			// CA, RomanM
-			if ($j('#comments-list > ul:first').length) {
-					siteType='RomanM'; // UL instead of OL
-			}
-		} else if ($j('ol.commentlist').length)  {
-			// DanH, JeffId
-			if ($j('ol.commentlist > li.comment:first').length) {
-				siteType='JeffId';
-			} else {
-				siteType='DanH'; // comment LI has no consistent class
-			}
-		} else if ($j('#content > span.KonaFilter').length) {
-				siteType='Lucia';
-		} else if ($j('dl.commentlist').length) {
-				siteType='WUWT';
-		}
+  case 'climateaudit.org': siteType='CA';
+  case 'wattsupwiththat.com': siteType='WUWT';
+  case 'dev.livestation.com': siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
 }
 
-DEBUG('Site type: '+siteType+(bFound? '*' : ''));
+console.log('Site type: '+siteType)
 
 //listID   where to find the comment list
 //bSeqDate True if date element precedes each comment element (WUWT)
@@ -611,7 +586,7 @@ function setupComments() {
 				$j(cmtForm.threadElm).sort(sortTreeIDdesc).prependTo('#commentListOL');//threaded tree
 			}
 		} else {
-	  	DEBUG('UNthreaded, '+$j(cmtForm.listElm).length+' items');
+	  	DEBUG('Unthreaded, '+$j(cmtForm.listElm).length+' items');
 			if (bRecentLast) {
 				$j(cmtForm.listElm).sort(sortIDasc).prependTo('#commentListOL');//threaded tree
 			} else {
