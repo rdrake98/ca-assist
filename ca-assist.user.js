@@ -67,10 +67,10 @@ GM_registerMenuCommand('CA Assistant - Clear Saved Values', function() { clearSe
 
 function loadHome() {}
 
-if (window.top != window.self) {	//don't run on frames or iframes
-	return;
+if (window.top != window.self) {  //don't run on frames or iframes
+  return;
 }
-	
+
 
 String.prototype.trim = function() {
   return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
@@ -82,11 +82,11 @@ String.prototype.rtrim = function() {
   return this.replace(/\s\s*$/, '');
 }
 String.prototype.untag = function() {
-	//console.log('UNTAG:'+this);
+  //console.log('UNTAG:'+this);
   return this.replace(/<[^>]+>/g, '');
 }
 
-	
+
 /* **************************************************
            Sort the comment tree
    ************************************************** */
@@ -95,8 +95,8 @@ var siteType='CA'
 console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
-  case 'dev.livestation.com': 
-    siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1); 
+  case 'dev.livestation.com':
+    siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
     break;
 }
 console.log('Site type: '+siteType)
@@ -112,25 +112,25 @@ console.log('Site type: '+siteType)
 
 var cmtForm
 switch (siteType) {
-	case 'CA': cmtForm= { 'listID': '#comments-list','listElm':'#commentListOL li','hideElm':'',
-		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
-		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
-	case 'CE': cmtForm= { 'listID': '.commentlist','listElm':'#commentListOL li','hideElm':'',
-		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
-		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
+  case 'CA': cmtForm= { 'listID': '#comments-list','listElm':'#commentListOL li','hideElm':'',
+    'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
+    'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
+  case 'CE': cmtForm= { 'listID': '.commentlist','listElm':'#commentListOL li','hideElm':'',
+    'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
+    'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
 };
-	
+
 function getCmtDate(txt) {
-	// made a separate function. RegEx variables appear to cause Big Trouble.
-	//[optional 'Posted ', then mm ddth, yyyy at hh:mm pm
+  // made a separate function. RegEx variables appear to cause Big Trouble.
+  //[optional 'Posted ', then mm ddth, yyyy at hh:mm pm
   console.log('getCmtDate: '+txt)
-	txt = txt.split('|',1)[0]; // remove any option stuff at the end...
+  txt = txt.split('|',1)[0]; // remove any option stuff at the end...
   console.log(txt)
-	var sRep='$1$3 $4';
-	var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim(); 
+  var sRep='$1$3 $4';
+  var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim();
   console.log(res)
-	return res;
-}	
+  return res;
+}
 
 //
 // ICON INITIALIZATIONS
@@ -162,15 +162,15 @@ var redBgImage =    '<img src="' +
                     '" />';
 
 var isNew = 8;     // a "new" comment is less than 8 hours ago
-var isOld = 24;			// an "old" comment is more than 48 hours (values are NOT the official defaults; just set her temporarily)
+var isOld = 24;     // an "old" comment is more than 48 hours (values are NOT the official defaults; just set her temporarily)
 var bShowThreads = 1; // default: do show threads
 var bRecentLast = 1; // default: show in oldest-to-recent order
 var bEnableOrder= 1; // default: do reorder comments
-var bHideOld = 1;		// default: do hide old comments
-var bColorAge = 1;		// default: do color comments by age
+var bHideOld = 1;   // default: do hide old comments
+var bColorAge = 1;    // default: do color comments by age
 var bReorgRcntCmt = 1; // default: reorganize recent comments widget
 
-// 
+//
 // INIT
 //
 
@@ -187,7 +187,7 @@ if (!initialized) {
     saveDefaultSettings();
     addToLog('info Icon', 'If you want to customize your view, please adjust your settings.');
   }
-	refreshSettings();
+  refreshSettings();
 
   var initialized = true;
   DEBUG('Completed initialize.');
@@ -213,44 +213,44 @@ customizeMasthead();
 /////////////////////////////////////////////////////////////////
 
 /* function sortrc(a,b) {
-     return a.id > b.id ? 1 : -1;  
+     return a.id > b.id ? 1 : -1;
 } */
 
 if (bReorgRcntCmt) {
-	var elmRC = $j('ul#recentcomments');
-	var rcList= new Array();
-	if (elmRC.length) {
-		$j('.recentcomments').each(function (i) {
-				var elmLinks=$j('a',this);
-				switch (elmLinks.length) {
-					default:
-					case 1: // normal
-						var elm= $j(this).get(0);
-						var sAuth = elm.childNodes[0].textContent;
-						sAuth = sAuth.substring(0, sAuth.length-4);
-						var sURL  = $j(elmLinks).attr('href');
-						var sTopic = $j(elmLinks).text();
-						break;
-					case 2: // Auth has a link
-						var elmA =  $j('a:first',this);
-						var sAuth = elmA.text();
-						elmA = elmA.next();
-						var sURL = elmA.attr('href');
-						var sTopic = elmA.text();
-						break;
-				}
-				if (rcList[sTopic] == undefined) { rcList[sTopic]=''; }
-				rcList[sTopic]+= '<li class="recentcomments"><a href="'+sURL+'" title="View the  comment by '+sAuth+
+  var elmRC = $j('ul#recentcomments');
+  var rcList= new Array();
+  if (elmRC.length) {
+    $j('.recentcomments').each(function (i) {
+        var elmLinks=$j('a',this);
+        switch (elmLinks.length) {
+          default:
+          case 1: // normal
+            var elm= $j(this).get(0);
+            var sAuth = elm.childNodes[0].textContent;
+            sAuth = sAuth.substring(0, sAuth.length-4);
+            var sURL  = $j(elmLinks).attr('href');
+            var sTopic = $j(elmLinks).text();
+            break;
+          case 2: // Auth has a link
+            var elmA =  $j('a:first',this);
+            var sAuth = elmA.text();
+            elmA = elmA.next();
+            var sURL = elmA.attr('href');
+            var sTopic = elmA.text();
+            break;
+        }
+        if (rcList[sTopic] == undefined) { rcList[sTopic]=''; }
+        rcList[sTopic]+= '<li class="recentcomments"><a href="'+sURL+'" title="View the  comment by '+sAuth+
           '"><span class="commentAuthor">'+sAuth+'</span></a></li>\n';
     });
-		var sOut='';
-		for (rcKey in rcList)  {
-			sOut +='<h4 class="recentCommentsPostTitle">'+rcKey+'</h4>\n';
-			// Create a nested list of the recent comments within the current post
-			sOut +='<ul>\n'+rcList[rcKey]+'\n</ul>\n';
-		}
-		$j(elmRC).html(sOut);
-	}
+    var sOut='';
+    for (rcKey in rcList)  {
+      sOut +='<h4 class="recentCommentsPostTitle">'+rcKey+'</h4>\n';
+      // Create a nested list of the recent comments within the current post
+      sOut +='<ul>\n'+rcList[rcKey]+'\n</ul>\n';
+    }
+    $j(elmRC).html(sOut);
+  }
 }
 
 
@@ -267,9 +267,9 @@ console.log(cmtForm.listID)
 console.log($j(cmtForm.listID).length)
 DEBUG('Initial site-dependent comment page prep');
 if (!$j(cmtForm.listID).length) { // don't waste time on non-comment pages
-	DEBUG('Not a comment page');
-	return; 
-} 
+  DEBUG('Not a comment page');
+  return;
+}
 
 $j(cmtForm.listID).attr('id','commentListOL');
 
@@ -280,27 +280,27 @@ var cmtCurDate = new Date;
 var cmtOldAge, cmtNewAge;
 
 function setAgeValues() {
-	cmtOldAge = cmtCurDate.valueOf() - isOld*60*60*1000;
-	cmtNewAge = cmtCurDate.valueOf() - isNew*60*60*1000;
+  cmtOldAge = cmtCurDate.valueOf() - isOld*60*60*1000;
+  cmtNewAge = cmtCurDate.valueOf() - isNew*60*60*1000;
 }
 
 const AGE_OLD  = 0;
 const AGE_NORM = 1;
 const AGE_NEW  = 2;
 
-function getCommentAge(elm) { 
-//	console.log('test:'+(cmtDates[elm.id]));
-//	console.log('diffn:'+(cmtDates[elm.id] - cmtOldAge));
-//	console.log('diffb:'+(cmtDates[elm.id] >= cmtOldAge));
-	var cmtAge = cmtDates[elm.id];
-	if (cmtAge <= cmtOldAge) return AGE_OLD;
-	if (cmtAge >= cmtNewAge) return AGE_NEW;
-	return AGE_NORM;
+function getCommentAge(elm) {
+//  console.log('test:'+(cmtDates[elm.id]));
+//  console.log('diffn:'+(cmtDates[elm.id] - cmtOldAge));
+//  console.log('diffb:'+(cmtDates[elm.id] >= cmtOldAge));
+  var cmtAge = cmtDates[elm.id];
+  if (cmtAge <= cmtOldAge) return AGE_OLD;
+  if (cmtAge >= cmtNewAge) return AGE_NEW;
+  return AGE_NORM;
 }
 
 function getCmtNum(cmt) {
-	var id=cmt.id;
-	return 0+id.split('-').slice(-1); 
+  var id=cmt.id;
+  return 0+id.split('-').slice(-1);
 }
 
 //
@@ -308,25 +308,25 @@ function getCmtNum(cmt) {
 //
 
 function sortIDasc(a,b) {
-     return a.id > b.id ? 1 : -1;  
+     return a.id > b.id ? 1 : -1;
 }
 function sortIDdesc(a,b) {
-     return a.id < b.id ? 1 : -1;  
+     return a.id < b.id ? 1 : -1;
 }
 function getMaxTreeID(a) {
-	// Return max id from a and its child comment objects
-	var maxC=getCmtNum(a);
-	$j(cmtForm.itemElm,a).each(function (i) {
-				var cNum = getCmtNum(this);
+  // Return max id from a and its child comment objects
+  var maxC=getCmtNum(a);
+  $j(cmtForm.itemElm,a).each(function (i) {
+        var cNum = getCmtNum(this);
         if (cNum > maxC) { maxC = cNum; }
       });
-	return maxC;
+  return maxC;
 }
 function sortTreeIDasc(a,b) {
-     return getMaxTreeID(a) > getMaxTreeID(b) ? 1 : -1;  
+     return getMaxTreeID(a) > getMaxTreeID(b) ? 1 : -1;
 }
 function sortTreeIDdesc(a,b) {
-     return getMaxTreeID(a) < getMaxTreeID(b) ? 1 : -1;  
+     return getMaxTreeID(a) < getMaxTreeID(b) ? 1 : -1;
 }
 
 var sReplyTxt= cmtForm.bHasReply ? "Paste Link" : "Reply w/ Link";
@@ -338,62 +338,62 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function setReplyLink(elm) {
-	var cmtURL='#'+elm.id;
-	var cmtDateStr = getCmtDate($j(cmtForm.dateText,elm).text());
-	
-	var cmtDate = new Date(cmtDateStr);
-	cmtDates[elm.id]=cmtDate.valueOf();
-	if (isNaN(cmtDates[elm.id])) {
-		DEBUG('NaN: "'+cmtDateStr+'"');
-	}
-	$j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>');
+  var cmtURL='#'+elm.id;
+  var cmtDateStr = getCmtDate($j(cmtForm.dateText,elm).text());
+
+  var cmtDate = new Date(cmtDateStr);
+  cmtDates[elm.id]=cmtDate.valueOf();
+  if (isNaN(cmtDates[elm.id])) {
+    DEBUG('NaN: "'+cmtDateStr+'"');
+  }
+  $j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>');
 }
 
 // operates on an object inside the comment of interest. The comment is 2nd-level parent.
 // the cmtDates[] array is not available; not certain why.
 function pasteReplyLink() {
-	var cmtElm = $j(this).parent();
-	cmtElm=$j(cmtElm).parent(); // up one
-	var cmtURL='#'+cmtElm.attr('id');
-	var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
-	var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
-	var cmtDate = new Date(cmtDateStr);
-	var cmtM= months[cmtDate.getMonth()];
-	var cmtHr = cmtDate.getHours();
-	var cmtMin = cmtDate.getMinutes();
-	if (cmtHr < 10) {cmtHr = '0'+cmtHr; }
-	if (cmtMin < 10) {cmtMin = '0'+cmtMin; }
-	var cmtFmtDate = cmtM+' '+cmtDate.getDate()+' '+cmtHr+':'+cmtMin;
+  var cmtElm = $j(this).parent();
+  cmtElm=$j(cmtElm).parent(); // up one
+  var cmtURL='#'+cmtElm.attr('id');
+  var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
+  var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
+  var cmtDate = new Date(cmtDateStr);
+  var cmtM= months[cmtDate.getMonth()];
+  var cmtHr = cmtDate.getHours();
+  var cmtMin = cmtDate.getMinutes();
+  if (cmtHr < 10) {cmtHr = '0'+cmtHr; }
+  if (cmtMin < 10) {cmtMin = '0'+cmtMin; }
+  var cmtFmtDate = cmtM+' '+cmtDate.getDate()+' '+cmtHr+':'+cmtMin;
 
-	var myValue = ((cmtForm.bHasReply) && ($j(this).text()=='Paste Link')) ? '' : 'Re: ';
-	myValue +='<a href="'+cmtURL+'">'+cmtAuth+' ('+cmtFmtDate+')</a>'+', ';
+  var myValue = ((cmtForm.bHasReply) && ($j(this).text()=='Paste Link')) ? '' : 'Re: ';
+  myValue +='<a href="'+cmtURL+'">'+cmtAuth+' ('+cmtFmtDate+')</a>'+', ';
 
-	var sel, startPos, endPos, scrollTop;
-	myField=document.getElementById('comment');
-	
-	//IE 
-	if (document.selection) {
-		myField.focus();
-		sel = document.selection.createRange();
-		sel.text = myValue;
-		myField.focus();
-	}
-	//MOZILLA
-	else if (myField.selectionStart || myField.selectionStart == '0') {
-		startPos = myField.selectionStart;
-		endPos = myField.selectionEnd;
-		scrollTop = myField.scrollTop;
-		myField.value = myField.value.substring(0, startPos)
-		              + myValue
+  var sel, startPos, endPos, scrollTop;
+  myField=document.getElementById('comment');
+
+  //IE
+  if (document.selection) {
+    myField.focus();
+    sel = document.selection.createRange();
+    sel.text = myValue;
+    myField.focus();
+  }
+  //MOZILLA
+  else if (myField.selectionStart || myField.selectionStart == '0') {
+    startPos = myField.selectionStart;
+    endPos = myField.selectionEnd;
+    scrollTop = myField.scrollTop;
+    myField.value = myField.value.substring(0, startPos)
+                  + myValue
                       + myField.value.substring(endPos, myField.value.length);
-		myField.focus();
-		myField.selectionStart = startPos + myValue.length;
-		myField.selectionEnd = startPos + myValue.length;
-		myField.scrollTop = scrollTop;
-	} else {
-		myField.value += myValue;
-		myField.focus();
-	}
+    myField.focus();
+    myField.selectionStart = startPos + myValue.length;
+    myField.selectionEnd = startPos + myValue.length;
+    myField.scrollTop = scrollTop;
+  } else {
+    myField.value += myValue;
+    myField.focus();
+  }
 }
 
 //
@@ -402,19 +402,19 @@ function pasteReplyLink() {
 // - color and/or hide as needed
 //
 function AgeComment(elm) {
-	switch (getCommentAge(elm)) {
-		case AGE_OLD:
-			if (bHideOld) { 
-				(cmtForm.hideElm.length ? $j(cmtForm.hideElm,elm) : $j(elm)).css("display","none");
-			} else if (bColorAge) { $j(elm).addClass("cmtOld"); }
-			break;
-		case AGE_NEW: 
-			if (bColorAge) { $j(elm).addClass("cmtNew"); }
-			break;
-		case AGE_NORM: 
-			if (bColorAge) { $j(elm).addClass("cmtNorm"); }
-		}
-	}
+  switch (getCommentAge(elm)) {
+    case AGE_OLD:
+      if (bHideOld) {
+        (cmtForm.hideElm.length ? $j(cmtForm.hideElm,elm) : $j(elm)).css("display","none");
+      } else if (bColorAge) { $j(elm).addClass("cmtOld"); }
+      break;
+    case AGE_NEW:
+      if (bColorAge) { $j(elm).addClass("cmtNew"); }
+      break;
+    case AGE_NORM:
+      if (bColorAge) { $j(elm).addClass("cmtNorm"); }
+    }
+  }
 
 function FixComment(i) {
   setReplyLink(this); // only need to do this one time
@@ -425,41 +425,41 @@ function FixComment(i) {
 function setupComments() {
   console.log(cmtForm.listElm)
   console.log($j(cmtForm.listElm).length)
-	setAgeValues();
-	//$j(cmtForm.listID).css("display","none"); // hide them all for a bit
-	//DEBUG('Comments hidden');
-	$j(cmtForm.listElm).each(FixComment);
-	
-	
+  setAgeValues();
+  //$j(cmtForm.listID).css("display","none"); // hide them all for a bit
+  //DEBUG('Comments hidden');
+  $j(cmtForm.listElm).each(FixComment);
+
+
   if (bEnableOrder) {
-  	DEBUG('cmt ReOrdering:');
-		if (bShowThreads) {
-	  	DEBUG('Threaded, '+$j(cmtForm.threadElm).length+' items');
-			if (bRecentLast) {
-				$j(cmtForm.threadElm).sort(sortTreeIDasc).prependTo('#commentListOL');//threaded tree
-			} else {
-				$j(cmtForm.threadElm).sort(sortTreeIDdesc).prependTo('#commentListOL');//threaded tree
-			}
-		} else {
-	  	DEBUG('Unthreaded, '+$j(cmtForm.listElm).length+' items');
-			if (bRecentLast) {
-				$j(cmtForm.listElm).sort(sortIDasc).prependTo('#commentListOL');//threaded tree
-			} else {
-				$j(cmtForm.listElm).sort(sortIDdesc).prependTo('#commentListOL');//threaded tree
-			}
-		}
-		DEBUG('comments reordered');
-	}
-	
-	$j('a.comment-paste-link').click(pasteReplyLink);
-	$j('a.comment-reply-link').click(pasteReplyLink);
-	DEBUG('comment links activated');
-	
-	//$j(cmtForm.listID).css("display","inline"); // restore the comments
-	//DEBUG('comment display restored');
+    DEBUG('cmt ReOrdering:');
+    if (bShowThreads) {
+      DEBUG('Threaded, '+$j(cmtForm.threadElm).length+' items');
+      if (bRecentLast) {
+        $j(cmtForm.threadElm).sort(sortTreeIDasc).prependTo('#commentListOL');//threaded tree
+      } else {
+        $j(cmtForm.threadElm).sort(sortTreeIDdesc).prependTo('#commentListOL');//threaded tree
+      }
+    } else {
+      DEBUG('Unthreaded, '+$j(cmtForm.listElm).length+' items');
+      if (bRecentLast) {
+        $j(cmtForm.listElm).sort(sortIDasc).prependTo('#commentListOL');//threaded tree
+      } else {
+        $j(cmtForm.listElm).sort(sortIDdesc).prependTo('#commentListOL');//threaded tree
+      }
+    }
+    DEBUG('comments reordered');
+  }
+
+  $j('a.comment-paste-link').click(pasteReplyLink);
+  $j('a.comment-reply-link').click(pasteReplyLink);
+  DEBUG('comment links activated');
+
+  //$j(cmtForm.listID).css("display","inline"); // restore the comments
+  //DEBUG('comment display restored');
 }
 
-setupComments();	
+setupComments();
 
 
 //
@@ -480,12 +480,12 @@ function customizeMasthead() {
 
   // Make a container for the ca-assist menu.
   var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
-  
+
   $j(cmtForm.topDiv).append(
     '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
     '<span id="wpa_settings">'+wpaTitle+'</span></div>');
 
-	$j('span#wpa_settings').click(toggleSettingsBox);
+  $j('span#wpa_settings').click(toggleSettingsBox);
 
 }
 
@@ -499,7 +499,7 @@ function customizeMasthead() {
 function DEBUG(line, level) {
   var level = (level == null) ? 0 : level;
 }
-  
+
 function showIfUnchecked(setting) {
   if (setting == '0') {
     setting = 'unchecked';
@@ -629,49 +629,49 @@ function createGeneralTab() {
   // Site Fixup options
   var sFixups = ''+
 '<div><b>Site-Wide</b><br/>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Neater Recent Comments:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
+' <div class="lhs">\n'+
+'   <label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Neater Recent Comments:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
 ((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
 '<br class="caaHide"/>\n';
-  
+
   $j(list).append(sFixups);
 
   // New/old comment timing
   var sNewOld=''+
 '<div><b>Comment Age</b><br/>\n'+
-'	<div class="lhs">\n'+
-'		<label for="isNew" title="Comment ages for coloring and hiding.">Define comment ages:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="isNew" type="text" value="'+GM_getValue('isNew', '24')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
-'		<label for="bHideOld"> (new) to </label><br/>\n'+
-'		<input id="isOld" type="text" value="'+GM_getValue('isOld', '72')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
-'		<label for="bHideOld"> (old) hours.</label>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="isNew" title="Comment ages for coloring and hiding.">Define comment ages:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="isNew" type="text" value="'+GM_getValue('isNew', '24')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <label for="bHideOld"> (new) to </label><br/>\n'+
+'   <input id="isOld" type="text" value="'+GM_getValue('isOld', '72')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <label for="bHideOld"> (old) hours.</label>\n'+
+' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
 '<div>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bColorAge" title="Check to color newer comments according to indicated time intervals.">Color new comments:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( (GM_getValue("bColorAge",'checked')=='checked') ? ' checked="checked"' : '') + '/>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="bColorAge" title="Check to color newer comments according to indicated time intervals.">Color new comments:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( (GM_getValue("bColorAge",'checked')=='checked') ? ' checked="checked"' : '') + '/>\n'+
+' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
 '<div>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bHideOld" title="Check to hide older comments."> Hide old comments:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( (GM_getValue("bHideOld",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="bHideOld" title="Check to hide older comments."> Hide old comments:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( (GM_getValue("bHideOld",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
 '';
@@ -683,30 +683,30 @@ var sThreadDisplay = ''+
 '<br/><div><b>Comment Order</b><br/>\n'+
 '(On largest pages, can take a few seconds)<br/>\n'+
 '<div>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bEnableOrder" title="Check to enable comment reordering">Enable reordering:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( (GM_getValue("bEnableOrder",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="bEnableOrder" title="Check to enable comment reordering">Enable reordering:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( (GM_getValue("bEnableOrder",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bShowThreads" title="Use threaded display for comments (if site supports it)"> Threaded display:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( (GM_getValue("bShowThreads",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'		<label title="Use threaded display for comments (if site supports it)"> (if site supports it)</label>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="bShowThreads" title="Use threaded display for comments (if site supports it)"> Threaded display:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( (GM_getValue("bShowThreads",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <label title="Use threaded display for comments (if site supports it)"> (if site supports it)</label>\n'+
+' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
 '<div>\n'+
-'	<div class="lhs">\n'+
-'		<label for="bRecentLast" title="Check to show most-recent comments at the end">Newest at end:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( (GM_getValue("bRecentLast",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'	</div>\n'+
+' <div class="lhs">\n'+
+'   <label for="bRecentLast" title="Check to show most-recent comments at the end">Newest at end:</label>\n'+
+' </div>\n'+
+' <div class="rhs">\n'+
+'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( (GM_getValue("bRecentLast",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
 '';
@@ -731,14 +731,14 @@ function saveDefaultSettings() {
 
   // General tab.
 
-	GM_setValue('isNew', '8');
-	GM_setValue('isOld', '24');
-	GM_setValue("bColorAge",'checked');
-	GM_setValue("bHideOld",'checked');
-	GM_setValue("bShowThreads",'checked');
-	GM_setValue("bRecentLast",'checked');
-	GM_setValue("bEnableOrder",'checked');
-	GM_setValue("bReorgRcntCmt",'checked');
+  GM_setValue('isNew', '8');
+  GM_setValue('isOld', '24');
+  GM_setValue("bColorAge",'checked');
+  GM_setValue("bHideOld",'checked');
+  GM_setValue("bShowThreads",'checked');
+  GM_setValue("bRecentLast",'checked');
+  GM_setValue("bEnableOrder",'checked');
+  GM_setValue("bReorgRcntCmt",'checked');
 
 }
 
@@ -747,10 +747,10 @@ function helpSettings() {
 }
 
 function saveSettings() {
-	
-	bColorAge      = (document.getElementById('bColorAge').checked === true);
-	bHideOld      = (document.getElementById('bHideOld').checked === true);
-	bShowThreads      = (document.getElementById('bShowThreads').checked === true);
+
+  bColorAge      = (document.getElementById('bColorAge').checked === true);
+  bHideOld      = (document.getElementById('bHideOld').checked === true);
+  bShowThreads      = (document.getElementById('bShowThreads').checked === true);
   bRecentLast  = (document.getElementById('bRecentLast').checked === true);
   bEnableOrder  = (document.getElementById('bEnableOrder').checked === true);
   bReorgRcntCmt = (document.getElementById('bReorgRcntCmt').checked === true);
@@ -759,15 +759,15 @@ function saveSettings() {
 
   GM_setValue ('isNew', isNew);
   GM_setValue ('isOld', isOld);
-	saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
+  saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
 
   toggleSettingsBox();
 }
 
 function refreshSettings() {
-	bColorAge    = GM_getValue('bColorAge','checked');
-	bHideOld     = GM_getValue('bHideOld','checked');
-	bShowThreads = GM_getValue('bShowThreads','checked');
+  bColorAge    = GM_getValue('bColorAge','checked');
+  bHideOld     = GM_getValue('bHideOld','checked');
+  bShowThreads = GM_getValue('bShowThreads','checked');
   bRecentLast  = GM_getValue('bRecentLast','checked');
   bEnableOrder  = GM_getValue('bEnableOrder','checked');
   bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
