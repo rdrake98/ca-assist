@@ -1171,7 +1171,7 @@ function createSettingsBox() {
 // Create General Tab
 function createGeneralTab() {
   var elt, title, id, label;
-  var generalTab = makeElement('div', null, {'id':'generalTab', 'class':'tabcontent', 'style':'width:380px;background: #003;'});
+  var generalTab = makeElement('div', null, {'id':'generalTab', 'class':'tabcontent', 'style':'width:380px;background: #003;display: block;'});
 
   // Container for a list of settings.
   var list = makeElement('div', generalTab, {'style':'position: relative; top: 10px; margin-left: auto; margin-right: auto; width: 98%; line-height:125%;'});
