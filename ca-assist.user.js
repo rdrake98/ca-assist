@@ -116,12 +116,12 @@ switch (siteType) {
 	case 'CA': cmtForm= { 'listID': '#comments-list ol','listElm':'#commentListOL li','hideElm':'',
 		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
 		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };
-	case 'WUWT': cmtForm= { 'listID': 'dl.commentlist','listElm':'#commentListOL > div','hideElm':'',
-		'threadElm':'#commentListOL > div','bSeqDate':1,'topDiv':'#header','replyElm':'span.commentmetadata',
-		'authElm':'.comment-author:first','itemElm': 'dd.comment', 'dateText': 'span.commentmetadata', 'bHasReply':false };
 	case 'CE': cmtForm= { 'listID': '#comments-list ol','listElm':'#commentListOL li','hideElm':'',
 		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
 		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };
+	case 'WUWT': cmtForm= { 'listID': 'dl.commentlist','listElm':'#commentListOL > div','hideElm':'',
+		'threadElm':'#commentListOL > div','bSeqDate':1,'topDiv':'#header','replyElm':'span.commentmetadata',
+		'authElm':'.comment-author:first','itemElm': 'dd.comment', 'dateText': 'span.commentmetadata', 'bHasReply':false };
 };
 	
 function getCmtDate(txt) {
