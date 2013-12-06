@@ -1085,7 +1085,7 @@ function createSettingsBox() {
   var elt = makeElement('div', document.body, {'class':'generic_dialog pop_dialog', 'id':'wpa_settingsBox'});
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
-  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 400px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
+  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 600px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
   //End settings box
 
@@ -1104,16 +1104,10 @@ function createSettingsBox() {
     stripURI(redBgImage) + ') repeat-x scroll 0 0; border: 1px solid #FFFFFF; fontsize: 13px; line-height: 28px; height: 30px;'});
   var generalTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'General_Tab', 'style':'color: #fcf !important;'});
   makeElement('a', generalTabLink, {'href':'#', 'rel':'generalTab'}).appendChild(document.createTextNode('General'));
-  var commentsTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'Comments_Tab', 'style':'color: #cff !important;'});
-  makeElement('a', commentsTabLink, {'href':'#', 'rel':'commentsTab'}).appendChild(document.createTextNode('Comments'));
 
   // Create General tab.
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
-
-  // Create Comments tab.
-  var commentsTab = createCommentsTab();
-  settingsBox.appendChild(commentsTab);
 
   // Create save button
   var saveButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 10px; bottom: 10px;'});
@@ -1192,17 +1186,6 @@ function createGeneralTab() {
   
   $j(list).append(sFixups);
 
-  return generalTab;
-}
-
-// Create Comments tab
-function createCommentsTab() {
-  var elt, title, id, label;
-  var commentsTab = makeElement('div', null, {'id':'commentsTab', 'class':'tabcontent', 'style':'width:380px;background: #300;'});
-
-  // Container for a list of settings.
-  var list = makeElement('div', commentsTab, {'style':'position: relative; top: 10px; margin-left: auto; margin-right: auto; width: 98%; line-height:125%;'});
-
   // New/old comment timing
   var sNewOld=''+
 '<div><b>Thread Age Highlighting</b><br/>\n'+
@@ -1237,7 +1220,7 @@ function createCommentsTab() {
 '<br class="caaHide"/>\n'+
 '';
 
-$j(list).append(sNewOld);
+  $j(list).append(sNewOld);
 
   // Comment threading
 var sThreadDisplay = ''+
@@ -1272,11 +1255,10 @@ var sThreadDisplay = ''+
 '</div>\n'+
 '';
 
-$j(list).append(sThreadDisplay);
+  $j(list).append(sThreadDisplay);
 
-  return commentsTab;
+  return generalTab;
 }
-
 
 
 function handleVersionChange() {
