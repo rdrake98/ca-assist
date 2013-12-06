@@ -354,11 +354,7 @@ function setReplyLink(elm) {
 function pasteReplyLink() {
 	var cmtElm = $j(this).parent();
 	cmtElm=$j(cmtElm).parent(); // up one
-	if (siteType=='WUWT') {
-		var cmtURL='#'+$j('dd',cmtElm).attr('id');
-	} else {
-		var cmtURL='#'+cmtElm.attr('id');
-	}
+	var cmtURL='#'+cmtElm.attr('id');
 	var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
 	if (siteType=='WUWT') {
 		var sDate=$j('dt',cmtElm).text();
