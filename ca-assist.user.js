@@ -127,9 +127,12 @@ switch (siteType) {
 function getCmtDate(txt) {
 	// made a separate function. RegEx variables appear to cause Big Trouble.
 	//[optional 'Posted ', then mm ddth, yyyy at hh:mm pm
+  console.log('getCmtDate: '+txt)
 	txt = txt.split('|',1)[0]; // remove any option stuff at the end...
+  console.log(txt)
 	var sRep='$1$3 $4';
 	var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim(); 
+  console.log(res)
 	return res;
 }	
 
@@ -366,49 +369,6 @@ function setWUWTpairs() {
 	});
 }
 
-//
-//
-// Lucia's Fix (comments need id's, auths marked, dates extracted, etc)
-//
-
-function setCommentInfo(elm) {
-	//console.log('finding id');
-	var iFound=1;
-	var bIsComment=1;
-	
-	var div = $j("p.commenticon",elm).get (0);
-	
-	for (var i in div.childNodes) {
-		if (!bIsComment || iFound > 6) break;
-		var child = div.childNodes[i];
-		if (child.nodeType === 1 || child.nodeType === 3) {
-			//console.log ('childTxt: "'+child.textContent+'" (iFound:'+iFound+')');
-			//console.log ('childHTML:'+child.innerHTML);
-			switch (iFound++) {
-				case 1: var sAuth = child.textContent.trim();$j(child).addClass('comment-author');break;
-				case 2: break; // paren
-				case 3: if (child.textContent != 'Comment') bIsComment=0;
-								break;
-				case 4: var sId = child.textContent.replace(/\#([\d]+)\)/,'Comment-$1').trim();break;
-				case 5: break; // blank
-				case 6: var sDate = child.textContent.trim(); break;
-			}
-		}
-	}
-	if (bIsComment) {
-			$j(elm).attr('id',sId);
-		
-		// Now set up the id, reply link, etc
-		var cmtURL='#'+elm.id;
-		var cmtDateStr = getCmtDate(sDate);
-		var cmtDate = new Date(cmtDateStr);
-		cmtDates[elm.id]=cmtDate.valueOf();
-		if (isNaN(cmtDates[elm.id])) {
-			DEBUG('NaN: "'+cmtDateStr+'"');
-		}
-		$j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>');
-	}
-}
 
 //
 // ADD REPLY LINKS
@@ -511,14 +471,8 @@ function AgeComment(elm) {
 	}
 
 function FixComment(i) {
-//	console.log('Fixing '+i);
-/*	if (siteType=='Lucia') {
-		setCommentInfo(this);
-		if (bHideOld || bColorAge) AgeComment(this);
-	} else {	 */
-		setReplyLink(this); // only need to do this one time
-		if (bHideOld || bColorAge) AgeComment(this);
-//	}
+  setReplyLink(this); // only need to do this one time
+  if (bHideOld || bColorAge) AgeComment(this);
 }
 
 
