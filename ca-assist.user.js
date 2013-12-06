@@ -91,7 +91,8 @@ String.prototype.untag = function() {
            Sort the comment tree
    ************************************************** */
 
-var siteType='CA'; // assume CA
+var siteType='CA'
+console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
   case 'wattsupwiththat.com': siteType='WUWT'; break;
@@ -123,7 +124,7 @@ switch (siteType) {
 		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };
 };
 	
-function getCmtDate(txt,bTest) {
+function getCmtDate(txt) {
 	// made a separate function. RegEx variables appear to cause Big Trouble.
 	//[optional 'Posted ', then mm ddth, yyyy at hh:mm pm
 	txt = txt.split('|',1)[0]; // remove any option stuff at the end...
@@ -269,15 +270,7 @@ if (!$j(cmtForm.listID).length) { // don't waste time on non-comment pages
 	return; 
 } 
 
-switch (siteType) {
-/*	case 'Lucia':
-		$j('#comment').val(''); // clear comment block; has tabs for some reason??!
-		$j('.comment').wrapAll('<div id="commentlistOL"></div>'); // Wrap up comments inside a div
-		
-		break; */
-	default:
-		$j(cmtForm.listID).attr('id','commentListOL');
-}
+$j(cmtForm.listID).attr('id','commentListOL');
 
 DEBUG('Define main comment page functions');
 
@@ -407,7 +400,7 @@ function setCommentInfo(elm) {
 		
 		// Now set up the id, reply link, etc
 		var cmtURL='#'+elm.id;
-		var cmtDateStr = getCmtDate(sDate,false);
+		var cmtDateStr = getCmtDate(sDate);
 		var cmtDate = new Date(cmtDateStr);
 		cmtDates[elm.id]=cmtDate.valueOf();
 		if (isNaN(cmtDates[elm.id])) {
@@ -424,7 +417,7 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 
 function setReplyLink(elm) {
 	var cmtURL='#'+elm.id;
-	var cmtDateStr = getCmtDate($j(cmtForm.dateText,elm).text(),false);
+	var cmtDateStr = getCmtDate($j(cmtForm.dateText,elm).text());
 	
 	var cmtDate = new Date(cmtDateStr);
 	cmtDates[elm.id]=cmtDate.valueOf();
@@ -456,7 +449,7 @@ function pasteReplyLink() {
 		var sTime=$j('dd span.comment-meta > small',cmtElm).text().replace(/[()]/g,'');
 		var cmtDateStr = sDate+' '+sTime;
 	} else {
-		var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text(),false);
+		var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
 	}
 	var cmtDate = new Date(cmtDateStr);
 	var cmtM= months[cmtDate.getMonth()];
