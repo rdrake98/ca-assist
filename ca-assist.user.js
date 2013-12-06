@@ -478,7 +478,6 @@ function FixComment(i) {
 
 function setupComments() {
 	setAgeValues();
-	
 	if (siteType=='WUWT') {
 		setWUWTpairs();
 	} else {
@@ -519,12 +518,6 @@ function setupComments() {
 }
 
 setupComments();	
-
-//
-// Comment preview arrives through the new CA-Assist-Comment module :)
-//
-
-
 
 
 //
