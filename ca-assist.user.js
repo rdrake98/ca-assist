@@ -371,14 +371,14 @@ function pasteReplyLink() {
 	var sel, startPos, endPos, scrollTop;
 	myField=document.getElementById('comment');
 	
-	//IE support
+	//IE 
 	if (document.selection) {
 		myField.focus();
 		sel = document.selection.createRange();
 		sel.text = myValue;
 		myField.focus();
 	}
-	//MOZILLA/NETSCAPE support
+	//MOZILLA
 	else if (myField.selectionStart || myField.selectionStart == '0') {
 		startPos = myField.selectionStart;
 		endPos = myField.selectionEnd;
