@@ -353,12 +353,7 @@ function setReplyLink(elm) {
 // the cmtDates[] array is not available; not certain why.
 function pasteReplyLink() {
 	var cmtElm = $j(this).parent();
-	switch(siteType) {
-		case 'WUWT':	cmtElm=$j(cmtElm).parent(); // two extra for WUWT
-		case 'Lucia': cmtElm=$j(cmtElm).parent(); // one extra
-		default:
-			cmtElm=$j(cmtElm).parent(); // up one
-		}
+	cmtElm=$j(cmtElm).parent(); // up one
 	if (siteType=='WUWT') {
 		var cmtURL='#'+$j('dd',cmtElm).attr('id');
 	} else {
