@@ -841,8 +841,6 @@ function createSettingsBox() {
 
   if (!document.getElementById('wpa_settings_css')) {
     makeElement('style', document.getElementsByTagName('head')[0], {'id':'wpa_settings_css', 'type':'text/css'}).appendChild(document.createTextNode(
-      '#settingsBox #tabNav div{border-right:1px solid #000;float:left;padding:0 7px;position:static;text-align:center}' +
-      '#settingsBox #tabNav div a{color:#fff;font-weight:700}' +
       '#settingsBox .fancy_button{position:absolute;background-image:url(' + stripURI(redBgImage) + ');border:1px solid #FFD927;color:#FFD927;cursor:pointer;display:block;float:left;font-size:14px;font-weight:700;padding:5px;text-decoration:none;width:auto}' +
       '#settingsBox .fancy_button button{background:transparent;border:medium none #FFF;color:#FFD927;cursor:pointer;font-size:14px;font-weight:700;margin:0}' +
       '#settingsBox .fancy_button button:hover{color:#BCD2EA;font-weight:700;text-decoration:none}' +
@@ -1027,19 +1025,7 @@ function saveDefaultSettings() {
 }
 
 function helpSettings() {
-  // Open the instructions page.
-  var tabs = document.getElementById('tabNav');
-  var helpName;
-
-  // Get the active tab and open corresponding wiki page
-  if (tabs) {
-    for (var i = 0, iLength=tabs.childNodes.length; i < iLength; ++i) {
-      if (tabs.childNodes[i].className == 'selected')
-        helpName = tabs.childNodes[i].id;
-    }
-
-    window.open('http://climateaudit.org/ca-assistant/#' + helpName);
-  }
+  window.open('http://climateaudit.org/ca-assistant/');
 }
 
 function saveSettings() {
