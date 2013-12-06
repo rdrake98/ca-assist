@@ -761,7 +761,9 @@ function customizeMasthead() {
   // Make a container for the ca-assist menu.
   var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
   
-  $j(cmtForm.topDiv).append('<div style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+wpaTitle+'</div><div id="wpa_menu" style="position: absolute; top: 40px; right: 25px; text-align: left;"><span id="wpa_settings">Settings</span>');
+  $j(cmtForm.topDiv).append(
+    '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
+    '<span id="wpa_settings">'+wpaTitle+'</span></div>');
 
 	$j('span#wpa_settings').click(toggleSettingsBox);
 
@@ -876,7 +878,7 @@ function createSettingsBox() {
   var elt = makeElement('div', document.body, {'class':'generic_dialog pop_dialog', 'id':'wpa_settingsBox'});
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
-  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 420px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
+  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 400px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
   // Create General tab.
   var generalTab = createGeneralTab();
@@ -910,11 +912,11 @@ function createGeneralTab() {
 
   // Site Fixup options
   var sFixups = ''+
-'<div><b>Site Fixups</b><br/>\n'+
+'<div><b>Site-Wide</b><br/>\n'+
 '	<div class="lhs">\n'+
-'		<label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Reorganize<br/>Recent Comments list:</label>\n'+
+'		<label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Neater Recent Comments:</label>\n'+
 '	</div>\n'+
-'	<div class="rhs"><br/>\n'+
+'	<div class="rhs">\n'+
 '		<input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
 ((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
@@ -926,7 +928,7 @@ function createGeneralTab() {
 
   // New/old comment timing
   var sNewOld=''+
-'<div><b>Thread Age Highlighting</b><br/>\n'+
+'<div><b>Comment Age</b><br/>\n'+
 '	<div class="lhs">\n'+
 '		<label for="isNew" title="Comment ages for coloring and hiding.">Define comment ages:</label>\n'+
 '	</div>\n'+
@@ -962,7 +964,7 @@ function createGeneralTab() {
 
   // Comment threading
 var sThreadDisplay = ''+
-'<br/><div><b>Display ReOrder</b><br/>\n'+
+'<br/><div><b>Comment Order</b><br/>\n'+
 '(On largest pages, can take a few seconds)<br/>\n'+
 '<div>\n'+
 '	<div class="lhs">\n'+
