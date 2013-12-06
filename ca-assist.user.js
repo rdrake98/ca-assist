@@ -1163,30 +1163,34 @@ function createGeneralTab() {
 
 
   // Logging option
-  var sLogging =''+
- '<div><b>Logging</b><br/>\n'+
+  var sLogging = ''+
+'<div><b>Logging</b><br/>\n'+
 '	<div class="lhs">\n'+
 '		<label for="autoLog" title="Check this to enable logging.">Enable logging:</label>\n'+
 '	</div>\n'+
 '	<div class="rhs">\n'+
-'		<input id="autoLog" type="checkbox" title="Check to enable logging." style="vertical-align: middle;" value="checked"' +( (GM_getValue("autoLog",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'		<input id="autoLog" type="checkbox" title="Check to enable logging." style="vertical-align: middle;" value="checked"'+
+((GM_getValue("autoLog",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
 '	</div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n';
-$j(list).append(sLogging);
+
+  $j(list).append(sLogging);
 
   // Site Fixup options
-  var sFixups =''+
- '<div><b>Site Fixups</b><br/>\n'+
+  var sFixups = ''+
+'<div><b>Site Fixups</b><br/>\n'+
 '	<div class="lhs">\n'+
 '		<label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Reorganize<br/>Recent Comments list:</label>\n'+
 '	</div>\n'+
 '	<div class="rhs"><br/>\n'+
-'		<input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"' +( (GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'		<input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
+((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
 '	</div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n';
-$j(list).append(sFixups);
+  
+  $j(list).append(sFixups);
 
   return generalTab;
 }
@@ -1198,7 +1202,6 @@ function createCommentsTab() {
 
   // Container for a list of settings.
   var list = makeElement('div', commentsTab, {'style':'position: relative; top: 10px; margin-left: auto; margin-right: auto; width: 98%; line-height:125%;'});
-
 
   // New/old comment timing
   var sNewOld=''+
