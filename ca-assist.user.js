@@ -1023,7 +1023,6 @@ function toggleSettingsBox() {
     showSettingsBox();
   } else {
     settingsOpen = false;
-    //hideSettingsBox();
     destroySettingsBox();
 
   }
@@ -1036,13 +1035,6 @@ function showSettingsBox() {
   }
 }
 
-function hideSettingsBox() {
-  var settingsBoxContainer = document.getElementById('wpa_settingsBox');
-  if (settingsBoxContainer) {
-    settingsBoxContainer.style.display = 'none';
-  }
-}
-
 function destroySettingsBox() {
   var settingsBoxContainer = document.getElementById('wpa_settingsBox');
   if (settingsBoxContainer) {
@@ -1051,7 +1043,7 @@ function destroySettingsBox() {
 }
 
 function createSettingsBox() {
-  if (document.getElementById('settingsBox')) return;
+  console.log("createSettingsBox");
 
   if (!document.getElementById('wpa_settings_css')) {
     makeElement('style', document.getElementsByTagName('head')[0], {'id':'wpa_settings_css', 'type':'text/css'}).appendChild(document.createTextNode(
@@ -1094,15 +1086,13 @@ function createSettingsBox() {
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
   var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 400px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
-  
 
   //End settings box
 
   var settingsBoxTopBG = makeElement('div', settingsBox, {'style':'position: static; height: 5px;'});
-
-    var settingsBoxTitle = makeElement('div', settingsBoxTopBG, {'style':'font-size: 18px; font-weight: bold;'});
-    makeElement('div', settingsBoxTopBG, {'style':'position: absolute; top: 0px; left: 0px; width:400px;background: #fff url("http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg") no-repeat;'});
-    makeElement('img', settingsBoxTopBG, {'src':stripURI(closeButtonIcon), 'style':'position: absolute; top: 2px; right: 2px; cursor: pointer;'}).addEventListener('click', toggleSettingsBox, false);
+  var settingsBoxTitle = makeElement('div', settingsBoxTopBG, {'style':'font-size: 18px; font-weight: bold;'});
+  makeElement('div', settingsBoxTopBG, {'style':'position: absolute; top: 0px; left: 0px; width:400px;background: #fff url("http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg") no-repeat;'});
+  makeElement('img', settingsBoxTopBG, {'src':stripURI(closeButtonIcon), 'style':'position: absolute; top: 2px; right: 2px; cursor: pointer;'}).addEventListener('click', toggleSettingsBox, false);
 
 
   // NOTE: Use the 1st line below to center the button bar, or the 2nd line
@@ -1110,25 +1100,20 @@ function createSettingsBox() {
   //elt = makeElement('div', settingsBox, {'style':'position: static; margin-left: auto; margin-right: auto; width: 100%; text-align: center'});
   elt = makeElement('div', settingsBox, {'style':'position: static; width: 100%; text-align: left'});
 
-  var tabNav = makeElement('div', elt, {'id':'tabNav', 'style':'position: static; display: inline-block; background: transparent url(' + stripURI(redBgImage) + ') repeat-x scroll 0 0; border: 1px solid #FFFFFF; fontsize: 13px; line-height: 28px; height: 30px;'});
-    var generalTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'General_Tab', 'style':'color: #fcf !important;'});
-      makeElement('a', generalTabLink, {'href':'#', 'rel':'generalTab'}).appendChild(document.createTextNode('General'));
-    var commentsTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'Comments_Tab', 'style':'color: #cff !important;'});
-      makeElement('a', commentsTabLink, {'href':'#', 'rel':'commentsTab'}).appendChild(document.createTextNode('Comments'));
-    var aboutTabLink = makeElement('div', tabNav, {'id':'About_Tab','style':'color:#ffc !important;'});
-      makeElement('a', aboutTabLink, {'href':'#', 'rel':'aboutTab'}).appendChild(document.createTextNode('About'));
+  var tabNav = makeElement('div', elt, {'id':'tabNav', 'style':'position: static; display: inline-block; background: transparent url(' +
+    stripURI(redBgImage) + ') repeat-x scroll 0 0; border: 1px solid #FFFFFF; fontsize: 13px; line-height: 28px; height: 30px;'});
+  var generalTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'General_Tab', 'style':'color: #fcf !important;'});
+  makeElement('a', generalTabLink, {'href':'#', 'rel':'generalTab'}).appendChild(document.createTextNode('General'));
+  var commentsTabLink = makeElement('div', tabNav, {'class':'selected', 'id':'Comments_Tab', 'style':'color: #cff !important;'});
+  makeElement('a', commentsTabLink, {'href':'#', 'rel':'commentsTab'}).appendChild(document.createTextNode('Comments'));
 
-// Create General tab.
+  // Create General tab.
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
 
-// Create Comments tab.
+  // Create Comments tab.
   var commentsTab = createCommentsTab();
   settingsBox.appendChild(commentsTab);
-
-// Create about tab.
-  var aboutTab = createAboutTab();
-  settingsBox.appendChild(aboutTab);
 
   // Create save button
   var saveButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 10px; bottom: 10px;'});
@@ -1289,26 +1274,6 @@ $j(list).append(sThreadDisplay);
   return commentsTab;
 }
 
-
-
-// Create About tab
-function createAboutTab () {
-  var elt, title, id, label;
-  var aboutTab = makeElement('div', null, {'id':'aboutTab', 'class':'tabcontent', 'style':'background: #030;width:380px'});
-
-var sAbout = ''+
-'<div style="font-size:18px;font-weight:bold">CA Assist, Version \n'+SCRIPT.version+
-', Build '+SCRIPT.build+'</div>\n'+
-'<br/><br/><b>What Is This:</b><br/>\n'+
-'The CA Assist tool helps ease the way toward substantial discussion of Open Science topics. It has been tuned to support blog sites that participate or encourage an Open Science process, particularly with respect to in-depth multidisciplinary understanding of Climate Science. (For now, only certain sites are supported.)\n'+
-'<br/><br/><b>Contributors:</b><br/>\n'+
-'MrPete\n'+
-'<br/>With much thanks to the Open Source Software community, especially the makers of jQuery, GreaseMonkey, etc\n'+
-'';
-
-	$j(aboutTab).append(sAbout);
-  return aboutTab;
-}
 
 
 function handleVersionChange() {
