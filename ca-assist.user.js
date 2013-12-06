@@ -762,13 +762,10 @@ function customizeMasthead() {
   // Make a container for the ca-assist menu.
   var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
   
-  $j(cmtForm.topDiv).append('<div style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+wpaTitle+'</div><div id="wpa_menu" style="position: absolute; top: 40px; right: 25px; text-align: left;"><span id="wpa_settings">Settings</span> | <span id="wpa_log">Log</span></div>');
-  
-	$j('span#wpa_settings').click(toggleSettingsBox);
-	$j('span#wpa_log').click(showLogBox);
+  $j(cmtForm.topDiv).append('<div style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+wpaTitle+'</div><div id="wpa_menu" style="position: absolute; top: 40px; right: 25px; text-align: left;"><span id="wpa_settings">Settings</span>');
 
-  // Show resume or paused based on if we are running or not.
-//  updateMastheadMenu();
+	$j('span#wpa_settings').click(toggleSettingsBox);
+
 }
 
 // ********************************************************************
@@ -777,73 +774,6 @@ function customizeMasthead() {
 // ********************************************************************
 // ********************************************************************
 
-
-function showLogBox() {
-  if (!$j('#wpaLogBox').length) {
-    createLogBox();
-  } else {
-    $j('#wpaLogBox').css('display','block');
-  }
-  if (!debug && GM_getValue('logOpen') != 'open' &&
-      !isChecked('autoLog')) {
-    alert('Logging is not enabled. To see new activity here, please open your settings and check "Enable logging" in the General tab.');
-  }
-  GM_setValue('logOpen', 'open');
-}
-
-function hideLogBox() {
-  $j('#wpaLogBox').css('display','none');
-  GM_setValue('logOpen', 'closed');
-}
-
-function clearLog() {
-  GM_setValue('itemLog', '');
-
-  //reset the log box
-  $j('#logBox').text('');
-}
-
-function createLogBox() {
-  // Define CSS styles.
-  makeElement('style', document.getElementsByTagName('head')[0], {'type':'text/css'}).appendChild(document.createTextNode(
-    '#wpaLogBox div.mouseunderline:hover{text-decoration:underline}' +
-    '#wpaLogBox .logEvent{border-bottom:1px solid #333; padding:4px 0px}' +
-    '#wpaLogBox .eventTime{color:#888; font-size: 10px; width:75px;  float:left}' +
-    '#wpaLogBox .eventBody{width:330px; float:right}' +
-    '#wpaLogBox .eventTime,#wpaLogBox .eventIcon,#wpaLogBox .eventBody{}' +
-    '#wpaLogBox .eventBody .good {color:#52E259;font-weight:bold;}' +
-    '#wpaLogBox .eventBody .bad {color:#EC2D2D;font-weight:bold;}' +
-    '#wpaLogBox .eventBody .warn {color:#EC2D2D;}' +
-    '#wpaLogBox .eventBody .user {color:#FFD927;}' +
-    '#wpaLogBox .clear{clear:both}' +
-    '#wpaLogBox .logEvent.Icon{background-repeat: no-repeat; background-position: 75px}' +
-    '#wpaLogBox .logEvent.process.Icon{background-image:url(' + stripURI(processIcon) + ')}' +
-    '#wpaLogBox .logEvent.warning.Icon{background-image:url(' + stripURI(warningIcon) + ')}' +
-    '#wpaLogBox .logEvent.info.Icon{background-image:url(' + stripURI(infoIcon) + ')}' +
-    '#wpaLogBox .logEvent.updateGood.Icon{background-image:url(' + stripURI(updateGoodIcon) + ')}' +
-    '#wpaLogBox .logEvent.good.Icon{background-image:url(' + stripURI(goodIcon) + ')}' +
-    '#wpaLogBox .logEvent.bad.Icon{background-image:url(' + stripURI(badIcon) + ')}'
-  ));
-
-
-  var wpaLogBox = makeElement('div', document.body, {'id':'wpaLogBox', 'style':'position: fixed; right: 30px; top: 55px; bottom: 10px; width: 450px; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF; z-index: 98; font-size: 12px;'});
-
-  var logClrButton = makeElement('div', wpaLogBox, {'class':'mouseunderline', 'style':'position: absolute; left: 5px; top: 0px; font-weight: 600; cursor: pointer; color: rgb(255, 217, 39);'});
-    logClrButton.appendChild(document.createTextNode('clear log'));
-    logClrButton.addEventListener('click', clearLog, false);
-
-  var closeLogButton = makeElement('div', wpaLogBox, {'class':'mouseunderline', 'id':'wpa_close_log','style':'position: absolute; right: 5px; top: 0px; font-weight: 600; cursor: pointer; color: rgb(255, 217, 39);'});
-    closeLogButton.appendChild(document.createTextNode('close'));
-    closeLogButton.addEventListener('click', hideLogBox, false);
-
-  var title = 'Click to toggle debug log';
-  var debugElt = makeElement('div', wpaLogBox, {'class':'mouseunderline', 'title':title,'id':'wpa_debug_log', 'style':'position: absolute; right: 80px; top: 0px; font-weight: 600; cursor: pointer; color: rgb(' + (debug ? '255' : '100') + ', 0, 0);'});
-    debugElt.appendChild(document.createTextNode('debug'));
-    debugElt.addEventListener('click', debugOnOff, false);
-
-  var logBox = makeElement('div', wpaLogBox, {'id':'logBox', 'style':'position: absolute; overflow: auto; right: 0px; top: 20px; bottom: 68px; width: 448px; background-color: #111111; font-size:11px; color: #BCD2EA; text-align: left; padding: 5px; border: 1px solid;'});
-    logBox.innerHTML = GM_getValue('itemLog', '');
-}
 
 function debugOnOff() {
   var debugElt = document.getElementById('wpa_debug_log');
@@ -860,7 +790,7 @@ function debugOnOff() {
   } else {
     GM_setValue('enableDebug', 'checked');
     debug = true;
-    showLogBox();
+    //showLogBox();
     addToLog('info Icon', 'Debug logging enabled.');
     if (debugElt) debugElt.style.color = 'rgb(255, 0, 0)';
 
@@ -1084,7 +1014,7 @@ function createSettingsBox() {
   var elt = makeElement('div', document.body, {'class':'generic_dialog pop_dialog', 'id':'wpa_settingsBox'});
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
-  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 460px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
+  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 420px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
   // Create General tab.
   var generalTab = createGeneralTab();
@@ -1115,22 +1045,6 @@ function createGeneralTab() {
 
   // Container for a list of settings.
   var list = makeElement('div', generalTab, {'style':'position: relative; top: 10px; margin-left: auto; margin-right: auto; width: 98%; line-height:125%;'});
-
-
-  // Logging option
-  var sLogging = ''+
-'<div><b>Logging</b><br/>\n'+
-'	<div class="lhs">\n'+
-'		<label for="autoLog" title="Check this to enable logging.">Enable logging:</label>\n'+
-'	</div>\n'+
-'	<div class="rhs">\n'+
-'		<input id="autoLog" type="checkbox" title="Check to enable logging." style="vertical-align: middle;" value="checked"'+
-((GM_getValue("autoLog",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'	</div>\n'+
-'</div>\n'+
-'<br class="caaHide"/>\n';
-
-  $j(list).append(sLogging);
 
   // Site Fixup options
   var sFixups = ''+
