@@ -91,17 +91,14 @@ String.prototype.untag = function() {
            Sort the comment tree
    ************************************************** */
 
-//
-// Detect which website style we're assisting
-//
 var siteType='CA'; // assume CA
-console.log('hostname: '+location.hostname)
 switch(location.hostname) {
-  case 'climateaudit.org': siteType='CA';
-  case 'wattsupwiththat.com': siteType='WUWT';
-  case 'dev.livestation.com': siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
+  case 'climateaudit.org': siteType='CA'; break;
+  case 'wattsupwiththat.com': siteType='WUWT'; break;
+  case 'dev.livestation.com': 
+    siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1); 
+    break;
 }
-
 console.log('Site type: '+siteType)
 
 //listID   where to find the comment list
@@ -113,28 +110,18 @@ console.log('Site type: '+siteType)
 //replyElm on which element to attach the Paste Reply link
 //bHasReply true if there's a reply link on each comment (otw, Paste Link will say "Re:")
 
-
+var cmtForm
 switch (siteType) {
-	case 'RomanM': var cmtForm= { 'listID': 'ul.comment_list', 'listElm':'#commentListOL li','hideElm':'div.entry',
-		'threadElm':'#commentListOL > li','bSeqDate':0,'topDiv':'#container','replyElm':'div.reply:first',
-		'authElm':'span.comment_author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };break;
-	case 'JeffId': var cmtForm= { 'listID': 'ol.commentlist', 'listElm':'#commentListOL li','hideElm':'',
-		'threadElm':'#commentListOL > li','bSeqDate':0,'topDiv':'#sitename','replyElm':'.comment-meta',
-		'authElm':'.comment-author cite','itemElm': 'li.comment', 'dateText': '.comment-meta', 'bHasReply':false };break;
-	case 'DanH':   var cmtForm= { 'listID': 'ol.commentlist', 'listElm':'#commentListOL li','hideElm':'',
-		'threadElm':'#commentListOL > li','bSeqDate':0,'topDiv':'#header','replyElm':'.commentmetadata',
-		'authElm':'cite > a.url','itemElm': 'li', 'dateText': '.commentmetadata', 'bHasReply':false };break;
-	case 'Lucia':  var cmtForm= { 'listID': 'div.commentlist', 'listElm':'div.comment','hideElm':'div.comment-text',
-		'threadElm':'div.comment','bSeqDate':0,'topDiv':'#bodyinner','replyElm':'.commentmetadata',
-		'authElm':'.comment-author','itemElm': 'div.comment', 'dateText': '.comment-date', 'bHasReply':false };break;
-	case 'WUWT':   var cmtForm= { 'listID': 'dl.commentlist','listElm':'#commentListOL > div','hideElm':'',
-		'threadElm':'#commentListOL > div','bSeqDate':1,'topDiv':'#header','replyElm':'span.commentmetadata',
-		'authElm':'.comment-author:first','itemElm': 'dd.comment', 'dateText': 'span.commentmetadata', 'bHasReply':false };break;
-	default:
-	case 'CA': var cmtForm=    { 'listID': '#comments-list ol','listElm':'#commentListOL li','hideElm':'',
+	case 'CA': cmtForm= { 'listID': '#comments-list ol','listElm':'#commentListOL li','hideElm':'',
 		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
-		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };break;
-	};
+		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };
+	case 'WUWT': cmtForm= { 'listID': 'dl.commentlist','listElm':'#commentListOL > div','hideElm':'',
+		'threadElm':'#commentListOL > div','bSeqDate':1,'topDiv':'#header','replyElm':'span.commentmetadata',
+		'authElm':'.comment-author:first','itemElm': 'dd.comment', 'dateText': 'span.commentmetadata', 'bHasReply':false };
+	case 'CE': cmtForm= { 'listID': '#comments-list ol','listElm':'#commentListOL li','hideElm':'',
+		'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
+		'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true };
+};
 	
 function getCmtDate(txt,bTest) {
 	// made a separate function. RegEx variables appear to cause Big Trouble.
@@ -188,46 +175,26 @@ var bReorgRcntCmt = 1; // default: reorganize recent comments widget
 //
 
 if (!initialized) {
-//alert('INIT');
-	//console.log('do init');
   var settingsOpen = false;
   var debug = isChecked('enableDebug');
-	//console.log('debug is:'+(debug? 'true' :'false'));
-
-  // Check for a version change.
   if (GM_getValue('version') != SCRIPT.version ||
       GM_getValue('build') != SCRIPT.build) {
-     //console.log('do ver chg');
     handleVersionChange();
-     //console.log('did ver chg');
   }
 
-
-
-  // Check for missing settings.
-//console.log('settings check');
-  
+// Check for missing settings.
   if (GM_getValue('isOld') == undefined) {
     saveDefaultSettings();
-//console.log('saved default');
     addToLog('info Icon', 'If you want to customize your view, please adjust your settings.');
-//console.log('logged it');
   }
-//console.log('do refresh settings');
 	refreshSettings();
-//console.log('refresh done');
 
   var initialized = true;
-//console.log('log refresh');
   DEBUG('Completed initialize.');
 } else {
- alert('ALREADY INIT -- tell MrPete!');
+  alert('ALREADY INIT -- tell MrPete!');
 }
 
-//
-// CODE HERE
-//
-DEBUG('Set up masthead');
 customizeMasthead();
 
 
@@ -273,8 +240,9 @@ if (bReorgRcntCmt) {
 						break;
 				}
 				if (rcList[sTopic] == undefined) { rcList[sTopic]=''; }
-				rcList[sTopic]+= '<li class="recentcomments"><a href="'+sURL+'" title="View the  comment by '+sAuth+'"><span class="commentAuthor">'+sAuth+'</span></a></li>\n';
-      });
+				rcList[sTopic]+= '<li class="recentcomments"><a href="'+sURL+'" title="View the  comment by '+sAuth+
+          '"><span class="commentAuthor">'+sAuth+'</span></a></li>\n';
+    });
 		var sOut='';
 		for (rcKey in rcList)  {
 			sOut +='<h4 class="recentCommentsPostTitle">'+rcKey+'</h4>\n';
@@ -463,8 +431,7 @@ function setReplyLink(elm) {
 	if (isNaN(cmtDates[elm.id])) {
 		DEBUG('NaN: "'+cmtDateStr+'"');
 	}
-	var dbgText = ''; // (debug ? '<br/><small>(id:'+elm.id+',dt:'+cmtDateStr+')</small>' : '');
-	$j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>'+dbgText);
+	$j(cmtForm.replyElm,elm).append('<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>');
 }
 
 // operates on an object inside the comment of interest. The comment is 2nd-level parent.
@@ -678,8 +645,6 @@ function stripURI(img) {
 // SETTINGS BOX
 // ********************************************************************
 // ********************************************************************
-var elt;
-
 
 function toggleSettingsBox() {
   if (settingsOpen === false) {
@@ -773,7 +738,7 @@ function createSettingsBox() {
 
 // Create General Tab
 function createGeneralTab() {
-  var elt, title, id, label;
+  var title, id, label;
   var generalTab = makeElement('div', null, {'id':'generalTab', 'class':'tabcontent', 'style':'width:380px;background: #003;'});
 
   // Container for a list of settings.
