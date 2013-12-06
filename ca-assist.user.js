@@ -1048,12 +1048,11 @@ function createSettingsBox() {
   if (!document.getElementById('wpa_settings_css')) {
     makeElement('style', document.getElementsByTagName('head')[0], {'id':'wpa_settings_css', 'type':'text/css'}).appendChild(document.createTextNode(
       '#settingsBox #tabNav div{border-right:1px solid #000;float:left;padding:0 7px;position:static;text-align:center}' +
-      '#settingsBox #tabNav div.selected{background-image:url(' + stripURI(tabSelectedImage) + ')}' +
       '#settingsBox #tabNav div a{color:#fff;font-weight:700}' +
       '#settingsBox .fancy_button{position:absolute;background-image:url(' + stripURI(redBgImage) + ');border:1px solid #FFD927;color:#FFD927;cursor:pointer;display:block;float:left;font-size:14px;font-weight:700;padding:5px;text-decoration:none;width:auto}' +
       '#settingsBox .fancy_button button{background:transparent;border:medium none #FFF;color:#FFD927;cursor:pointer;font-size:14px;font-weight:700;margin:0}' +
       '#settingsBox .fancy_button button:hover{color:#BCD2EA;font-weight:700;text-decoration:none}' +
-      '#settingsBox .tabcontent{display:block;top:60px;bottom:60px;left:10px;right:10px;}' +
+      '#settingsBox .tabcontent{display:block;top:20px;bottom:60px;left:10px;right:10px;}' +
       '#settingsBox div,#settingsBox select,#settingsBox textarea{position:absolute}' +
       '#settingsBox label {font-weight: normal; color: #BCD2EA}' +
       '#settingsBox #generalTab div,  #commentsTab div ' +
@@ -1085,7 +1084,7 @@ function createSettingsBox() {
   var elt = makeElement('div', document.body, {'class':'generic_dialog pop_dialog', 'id':'wpa_settingsBox'});
   elt = makeElement('div', elt, {'class':'generic_dialog_popup', 'style':'top: 30px; width: 400px;'});
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
-  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 480px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black url(http://climateaudit.files.wordpress.com/2009/11/climateauditbannerplain.jpg) no-repeat;background-position: 0 -50px; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
+  var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 460px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
   // Create General tab.
   var generalTab = createGeneralTab();
@@ -1142,8 +1141,9 @@ function createGeneralTab() {
 '	<div class="rhs"><br/>\n'+
 '		<input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
 ((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
-'	</div>\n'+
+' </div>\n'+
 '</div>\n'+
+'<br class="caaHide"/>\n'+
 '<br class="caaHide"/>\n';
   
   $j(list).append(sFixups);
