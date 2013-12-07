@@ -47,10 +47,10 @@
 // @include     http://rankexploits.com/musings/*
 // @include     http://wattsupwiththat.com/*
 // @include     http://danhughes.auditblogs.com/*
-// @include     http://dev.livestation.com/climfit/*
+// @include     http://dev.whiteword.com/climfit/*
 // @version     0.1
-// @require     http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js
-// @require     https://raw.github.com/rdrake98/ca-assist/master/ca-assist-comment.js
+// @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist-lib/jquery.min.js
+// @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist/ca-assist-comment.js
 // ==/UserScript==
 var $j = jQuery.noConflict();
 
@@ -95,7 +95,7 @@ var siteType='CA'
 console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
-  case 'dev.livestation.com':
+  case 'dev.whiteword.com':
     siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
     break;
 }
