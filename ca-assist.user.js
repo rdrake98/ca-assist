@@ -555,11 +555,10 @@ function destroySettingsBox() {
 }
 
 function createSettingsBox() {
-  console.log("createSettingsBox");
-
   if (!document.getElementById('wpa_settings_css')) {
     makeElement('style', document.getElementsByTagName('head')[0], {'id':'wpa_settings_css', 'type':'text/css'}).appendChild(document.createTextNode(
-      '#settingsBox .fancy_button{position:absolute;background-image:url(' + stripURI(redBgImage) + ');border:1px solid #FFD927;color:#FFD927;cursor:pointer;display:block;float:left;font-size:14px;font-weight:700;padding:5px;text-decoration:none;width:auto}' +
+      '#settingsBox .fancy_button{position:absolute;background-image:url(' + stripURI(redBgImage) + 
+      ');border:1px solid #FFD927;color:#FFD927;cursor:pointer;display:block;float:left;font-size:14px;font-weight:700;padding:5px;text-decoration:none;width:auto}' +
       '#settingsBox .fancy_button button{background:transparent;border:medium none #FFF;color:#FFD927;cursor:pointer;font-size:14px;font-weight:700;margin:0}' +
       '#settingsBox .fancy_button button:hover{color:#BCD2EA;font-weight:700;text-decoration:none}' +
       '#settingsBox .tabcontent{display:block;top:20px;bottom:60px;left:10px;right:10px;}' +
