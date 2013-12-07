@@ -167,7 +167,6 @@ if (!initialized) {
 // Check for missing settings.
 	if (GM_getValue('isOld') == undefined) {
 		saveDefaultSettings();
-		addToLog('info Icon', 'If you want to customize your view, please adjust your settings.');
 	}
 	refreshSettings();
 
@@ -698,7 +697,6 @@ var sThreadDisplay = ''+
 
 
 function handleVersionChange() {
-	addToLog('updateGood Icon', 'Now running version ' + SCRIPT.version + ' build ' + SCRIPT.build);
 	GM_setValue('version', SCRIPT.version);
 	GM_setValue('build', SCRIPT.build);
 	// Check for invalid settings and upgrade them.
@@ -791,7 +789,6 @@ function updateScript() {
 			}
 		});
 	} catch (ex) {
-		addToLog('warning Icon', ex);
 	}
 }
 
