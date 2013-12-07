@@ -114,17 +114,13 @@ switch (siteType) {
 };
 
 function getCmtDate(elm) {
-  console.log('t1.1.1.1.1')
   var txt = $j(cmtForm.dateText,elm).text()
   txt = siteType == 'CE' ? txt.split("\n")[1].trim() : txt
   // made a separate function. RegEx variables appear to cause Big Trouble.
   // optional 'Posted ', then mm ddth, yyyy at hh:mm pm
-  console.log('t1.1.1.1.2')
   txt = txt.split('|',1)[0]; // remove any option stuff at the end...
-  console.log('t1.1.1.1.3')
   var sRep='$1$3 $4';
   var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim();
-  console.log(res)
   return res;
 }
 
@@ -172,7 +168,6 @@ var bReorgRcntCmt = 1; // default: reorganize recent comments widget
 
 if (!initialized) {
   var settingsOpen = false;
-  var debug = isChecked('enableDebug');
   if (GM_getValue('version') != SCRIPT.version ||
       GM_getValue('build') != SCRIPT.build) {
     handleVersionChange();
@@ -334,10 +329,8 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function setReplyLink(elm) {
-  console.log('t1.1.1.1')
   var cmtURL='#'+elm.id;
   var cmtDateStr = getCmtDate(elm);
-  console.log('t1.1.1.2')
 
   var cmtDate = new Date(cmtDateStr);
   cmtDates[elm.id]=cmtDate.valueOf();
@@ -415,9 +408,7 @@ function AgeComment(elm) {
   }
 
 function FixComment(i) {
-  console.log('t1.1.1')
   setReplyLink(this); // only need to do this one time
-  console.log('t1.1.2')
   if (bHideOld || bColorAge) AgeComment(this);
 }
 
@@ -428,9 +419,7 @@ function setupComments() {
   setAgeValues();
   //$j(cmtForm.listID).css("display","none"); // hide them all for a bit
   //DEBUG('Comments hidden');
-  console.log('t1.1')
   $j(cmtForm.listElm).each(FixComment);
-  console.log('t1.2')
 
 
   if (bEnableOrder) {
@@ -461,11 +450,7 @@ function setupComments() {
   //DEBUG('comment display restored');
 }
 
-console.log('t1')
-
 setupComments();
-
-console.log('t2')
 
 //
 // UTILITY FUNCTIONS
