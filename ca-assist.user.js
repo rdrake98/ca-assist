@@ -42,11 +42,7 @@
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
 // @include     http://www.climateaudit.org/*
-// @include     http://noconsensus.wordpress.com/*
-// @include     http://statpad.wordpress.com/*
-// @include     http://rankexploits.com/musings/*
-// @include     http://wattsupwiththat.com/*
-// @include     http://danhughes.auditblogs.com/*
+// @include     http://judithcurry.com/*
 // @include     http://dev.whiteword.com/climfit/*
 // @version     0.1
 // @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist-lib/jquery.min.js
@@ -95,6 +91,7 @@ var siteType='CA'
 console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
+  case 'judithcurry.com': siteType='CE'; break;
   case 'dev.whiteword.com':
     siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
     break;
