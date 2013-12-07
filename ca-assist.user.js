@@ -116,12 +116,10 @@ switch (siteType) {
 function getCmtDate(elm) {
   var txt = $j(cmtForm.dateText,elm).text()
   txt = siteType == 'CE' ? txt.split("\n")[1].trim() : txt
-  // made a separate function. RegEx variables appear to cause Big Trouble.
   // optional 'Posted ', then mm ddth, yyyy at hh:mm pm
   txt = txt.split('|',1)[0]; // remove any option stuff at the end...
   var sRep='$1$3 $4';
-  var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim();
-  return res;
+  return txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim();
 }
 
 //
