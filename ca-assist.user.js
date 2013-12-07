@@ -117,7 +117,7 @@ switch (siteType) {
     'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
   case 'CE': cmtForm= { 'listID': '.commentlist','listElm':'#commentListOL li','hideElm':'',
     'threadElm':'#commentListOL > li','bSeqDate':0, 'topDiv':'#header','replyElm':'.comment-meta:first',
-    'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': '.comment-meta:first', 'bHasReply':true }; break;
+    'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': 'span.commentmetadata a:first-child', 'bHasReply':true }; break;
 };
 
 function getCmtDate(txt) {
@@ -337,9 +337,13 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 //
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+function getDateText(elm) {
+  return $j(cmtForm.dateText,elm).text().split("\n")[1].trim()
+}
+
 function setReplyLink(elm) {
   var cmtURL='#'+elm.id;
-  var cmtDateStr = getCmtDate($j(cmtForm.dateText,elm).text());
+  var cmtDateStr = getCmtDate(getDateText(elm));
 
   var cmtDate = new Date(cmtDateStr);
   cmtDates[elm.id]=cmtDate.valueOf();
@@ -356,7 +360,7 @@ function pasteReplyLink() {
   cmtElm=$j(cmtElm).parent(); // up one
   var cmtURL='#'+cmtElm.attr('id');
   var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
-  var cmtDateStr = getCmtDate($j(cmtForm.dateText,cmtElm).text());
+  var cmtDateStr = getCmtDate(getDateText(elm));
   var cmtDate = new Date(cmtDateStr);
   var cmtM= months[cmtDate.getMonth()];
   var cmtHr = cmtDate.getHours();
