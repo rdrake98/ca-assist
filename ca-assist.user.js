@@ -48,8 +48,8 @@
 // @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist-lib/jquery.min.js
 // @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist/ca-assist-comment.js
 // ==/UserScript==
-var $j = jQuery.noConflict();
 
+var $j = jQuery.noConflict();
 
 var SCRIPT = { // URL of the script for updates
   url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
@@ -58,15 +58,11 @@ var SCRIPT = { // URL of the script for updates
   ajaxPage: 'inner2',
 };
 
-// Register debugOnOff, etc with Greasemonkey (for later)
-GM_registerMenuCommand('CA Assistant - Clear Saved Values', function() { clearSettings(); loadHome(); });
-
-function loadHome() {}
+console.log('hostname: '+location.hostname)
 
 if (window.top != window.self) {  //don't run on frames or iframes
   return;
 }
-
 
 String.prototype.trim = function() {
   return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
@@ -88,7 +84,6 @@ String.prototype.untag = function() {
    ************************************************** */
 
 var siteType='CA'
-console.log('hostname: '+location.hostname)
 switch(location.hostname) {
   case 'climateaudit.org': siteType='CA'; break;
   case 'judithcurry.com': siteType='CE'; break;
