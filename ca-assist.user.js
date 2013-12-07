@@ -76,7 +76,6 @@ String.prototype.rtrim = function() {
   return this.replace(/\s\s*$/, '');
 }
 String.prototype.untag = function() {
-  //console.log('UNTAG:'+this);
   return this.replace(/<[^>]+>/g, '');
 }
 
@@ -114,12 +113,17 @@ switch (siteType) {
     'authElm':'.comment-author:first','itemElm': 'li.comment', 'dateText': 'span.commentmetadata a:first-child', 'bHasReply':true }; break;
 };
 
-function getCmtDate(txt) {
+function getCmtDate(elm) {
+  console.log('t1.1.1.1.1')
+  var txt = $j(cmtForm.dateText,elm).text().split("\n")[1].trim()
   // made a separate function. RegEx variables appear to cause Big Trouble.
-  //[optional 'Posted ', then mm ddth, yyyy at hh:mm pm
+  // optional 'Posted ', then mm ddth, yyyy at hh:mm pm
+  console.log('t1.1.1.1.2')
   txt = txt.split('|',1)[0]; // remove any option stuff at the end...
+  console.log('t1.1.1.1.3')
   var sRep='$1$3 $4';
   var res = txt.replace(/(?:Posted )?([A-Za-z]+ [0-9]+)([a-z]*)(, [0-9]+) at ([0-9]+:[0-9]+ (AM|PM))+/i, sRep).trim();
+  console.log(res)
   return res;
 }
 
@@ -328,13 +332,11 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 //
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function getDateText(elm) {
-  return $j(cmtForm.dateText,elm).text().split("\n")[1].trim()
-}
-
 function setReplyLink(elm) {
+  console.log('t1.1.1.1')
   var cmtURL='#'+elm.id;
-  var cmtDateStr = getCmtDate(getDateText(elm));
+  var cmtDateStr = getCmtDate(elm);
+  console.log('t1.1.1.2')
 
   var cmtDate = new Date(cmtDateStr);
   cmtDates[elm.id]=cmtDate.valueOf();
@@ -351,7 +353,7 @@ function pasteReplyLink() {
   cmtElm=$j(cmtElm).parent(); // up one
   var cmtURL='#'+cmtElm.attr('id');
   var cmtAuth = $j(cmtForm.authElm,cmtElm).text().trim();
-  var cmtDateStr = getCmtDate(getDateText(elm));
+  var cmtDateStr = getCmtDate(elm);
   var cmtDate = new Date(cmtDateStr);
   var cmtM= months[cmtDate.getMonth()];
   var cmtHr = cmtDate.getHours();
@@ -412,7 +414,9 @@ function AgeComment(elm) {
   }
 
 function FixComment(i) {
+  console.log('t1.1.1')
   setReplyLink(this); // only need to do this one time
+  console.log('t1.1.2')
   if (bHideOld || bColorAge) AgeComment(this);
 }
 
@@ -423,7 +427,9 @@ function setupComments() {
   setAgeValues();
   //$j(cmtForm.listID).css("display","none"); // hide them all for a bit
   //DEBUG('Comments hidden');
+  console.log('t1.1')
   $j(cmtForm.listElm).each(FixComment);
+  console.log('t1.2')
 
 
   if (bEnableOrder) {
@@ -454,8 +460,11 @@ function setupComments() {
   //DEBUG('comment display restored');
 }
 
+console.log('t1')
+
 setupComments();
 
+console.log('t2')
 
 //
 // UTILITY FUNCTIONS
