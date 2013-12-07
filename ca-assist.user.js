@@ -58,6 +58,8 @@ var SCRIPT = { // URL of the script for updates
   ajaxPage: 'inner2',
 };
 
+var debug = false
+
 console.log('hostname: '+location.hostname)
 
 if (window.top != window.self) {  //don't run on frames or iframes
@@ -489,8 +491,8 @@ function customizeMasthead() {
 // ********************************************************************
 
 
-function DEBUG(line, level) {
-  var level = (level == null) ? 0 : level;
+function DEBUG(line) {
+  if(debug) console.log(line)
 }
 
 function showIfUnchecked(setting) {
