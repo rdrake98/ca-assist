@@ -115,7 +115,8 @@ switch (siteType) {
 
 function getCmtDate(elm) {
   console.log('t1.1.1.1.1')
-  var txt = $j(cmtForm.dateText,elm).text().split("\n")[1].trim()
+  var txt = $j(cmtForm.dateText,elm).text()
+  txt = siteType == 'CE' ? txt.split("\n")[1].trim() : txt
   // made a separate function. RegEx variables appear to cause Big Trouble.
   // optional 'Posted ', then mm ddth, yyyy at hh:mm pm
   console.log('t1.1.1.1.2')
