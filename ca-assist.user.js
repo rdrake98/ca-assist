@@ -631,9 +631,9 @@ function createGeneralTab() {
 
   // Site Fixup options
   var sFixups = ''+
-'<div><b>Site-Wide</b><br/>\n'+
+'<div><b>Recent Comments</b><br/>\n'+
 ' <div class="lhs">\n'+
-'   <label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Neater Recent Comments:</label>\n'+
+'   <label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Commenter by thread:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
 '   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
