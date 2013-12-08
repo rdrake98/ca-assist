@@ -25,7 +25,7 @@
 * @credits: Inspired by Mafia Wars Autoplayer script and more
 *
 * History:
-* 0.1 Use jQuery 2.0.3
+* 0.1 Use jQuery 2.0.3 and support Climate Etc.
 * 0.0.9 Support new Lucia version.
 * 0.0.8 All Open Science Blog Ring sites now should work. Comment reorder now optional. Many bugfixes.
 */
@@ -174,7 +174,6 @@ if (!initialized) {
 // Check for missing settings.
   if (GM_getValue('isOld') == undefined) {
     saveDefaultSettings();
-    addToLog('info Icon', 'If you want to customize your view, please adjust your settings.');
   }
   refreshSettings();
 
@@ -705,7 +704,6 @@ var sThreadDisplay = ''+
 
 
 function handleVersionChange() {
-  addToLog('updateGood Icon', 'Now running version ' + SCRIPT.version + ' build ' + SCRIPT.build);
   GM_setValue('version', SCRIPT.version);
   GM_setValue('build', SCRIPT.build);
   // Check for invalid settings and upgrade them.
@@ -798,7 +796,6 @@ function updateScript() {
       }
     });
   } catch (ex) {
-    addToLog('warning Icon', ex);
   }
 }
 
