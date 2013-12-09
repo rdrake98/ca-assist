@@ -58,8 +58,6 @@ var SCRIPT = { // URL of the script for updates
   ajaxPage: 'inner2',
 };
 
-var debug = false
-
 console.log('hostname: '+location.hostname)
 
 if (window.top != window.self) {  //don't run on frames or iframes
@@ -482,8 +480,22 @@ function customizeMasthead() {
 // ********************************************************************
 
 
+function pad0(int, length) {
+  var result = int.toString()
+  while(result.length<length) result = "0"+result
+  return result
+}
+
+function logDate() {
+  var now = new Date()
+  return pad0(now.getHours(), 2) + ':' + 
+    pad0(now.getMinutes(), 2) + ':' + 
+    pad0(now.getSeconds(), 2) + ':' + 
+    pad0(now.getMilliseconds(), 3)
+}
+
 function DEBUG(line) {
-  if(debug) console.log(line)
+  dump(logDate() + ' ' + line +'\n')
 }
 
 function showIfUnchecked(setting) {
