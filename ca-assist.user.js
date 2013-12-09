@@ -481,9 +481,7 @@ function customizeMasthead() {
 
 
 function pad0(int, length) {
-  var result = int.toString()
-  while(result.length<length) result = "0"+result
-  return result
+  return ("000" + int).slice(-length)
 }
 
 function logDate() {
