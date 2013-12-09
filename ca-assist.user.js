@@ -35,7 +35,7 @@
 //
 
 // ==UserScript==
-// @name        ca-assist
+// @name        ca-assist-local
 // @namespace   ca-assist
 // @description Enhances user experience on Open Science Web Ring courtesy of Climate Audit
 // @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
@@ -465,7 +465,7 @@ function customizeMasthead() {
   if (!$j(cmtForm.topDiv).length) return;
 
   // Make a container for the ca-assist menu.
-  var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
+  var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ') LOCAL';
 
   $j(cmtForm.topDiv).append(
     '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
