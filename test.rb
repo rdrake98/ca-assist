@@ -5,7 +5,7 @@ class TestClimfit < MiniTest::Test
   
   describe "basics" do
     before do
-      @driver = Selenium::WebDriver.for :firefox
+      @driver = Selenium::WebDriver.for :firefox, profile: "caa"
     end
     
     it "should have correct title" do
