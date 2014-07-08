@@ -1,5 +1,6 @@
 require 'selenium-webdriver'
 require 'minitest/autorun'
+require 'nokogiri'
 
 class TestClimfit < MiniTest::Test
   
@@ -10,7 +11,8 @@ class TestClimfit < MiniTest::Test
     
     it "should have correct title" do
       @driver.get "http://climateaudit.org"
-      assert_equal "Climate Audit", @driver.title
+      doc = Nokogiri::HTML(@driver.page_source)
+      assert_equal "Climate Audit", doc.title.strip
     end
   end
 end
