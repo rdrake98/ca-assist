@@ -26,33 +26,33 @@ class TestClimfit < MiniTest::Test
     
   describe "WUWT" do
     
-    @@doc = TestClimfit.get_noko(
+    @@wuwt = TestClimfit.get_noko(
       "http://wattsupwiththat.com/2014/07/08/record-levels-of-solar-ultraviolet-measured-in-south-america/"
     )
 
     it "should have correct title" do 
       assert_equal(
         "Record levels of solar ultraviolet measured in South America | Watts Up With That?", 
-        @@doc.title.strip
+        @@wuwt.title.strip
       )
     end
 
-    it "should have some comments" do 
-      comments = @@doc.css '.highlander-comment'
+    it "should have comments" do 
+      comments = @@wuwt.css '.highlander-comment'
       assert_equal nil, comments.size
     end
   end
 
   describe "Local" do
     
-    @@doc = TestClimfit.get_noko "file:///Users/richarddrake/web/climfit/CE4.html"
+    @@ce4 = TestClimfit.get_noko "file:///Users/richarddrake/web/climfit/CE4.html"
 
     it "should have title" do 
-      assert_equal "Selection bias in climate model simulations | Climate Etc.", @@doc.title.strip
+      assert_equal "Selection bias in climate model simulations | Climate Etc.", @@ce4.title.strip
     end
 
     it "should have comments" do 
-      comments = @@doc.css '.highlander-comment'
+      comments = @@ce4.css '.highlander-comment'
       assert_equal nil, comments.size
     end
   end
