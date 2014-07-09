@@ -34,5 +34,10 @@ class TestClimfit < MiniTest::Test
         @doc.title.strip
       )
     end
+
+    it "should have some comments" do 
+      comments = @doc.css('.highlander-comment')
+      assert_equal 22, comments.size
+    end
   end
 end
