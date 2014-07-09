@@ -10,13 +10,16 @@ class TestClimfit < MiniTest::Test
     end
     
     after do
-      @driver.quit
+      # @driver.quit
     end
     
     it "should have correct title" do
       @driver.get "http://climateaudit.org"
       doc = Nokogiri::HTML(@driver.page_source)
       assert_equal "Climate Audit", doc.title.strip
+      @driver.get(
+        "http://wattsupwiththat.com/2014/07/08/record-levels-of-solar-ultraviolet-measured-in-south-america/"
+      )
     end
   end
 end
