@@ -47,7 +47,7 @@ class TestClimfit < MiniTest::Test
     
     @@ce4 = TestClimfit.get_noko "file:///Users/richarddrake/web/climfit/CE4.html"
 
-    it "should have title" do 
+    it "should have correct title" do 
       assert_equal "Selection bias in climate model simulations | Climate Etc.", @@ce4.title.strip
     end
 
