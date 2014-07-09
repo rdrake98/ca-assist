@@ -13,14 +13,18 @@ class TestClimfit < MiniTest::Test
     Nokogiri::HTML @@driver.page_source
   end
 
-  describe "basics" do
+  describe "CA" do
     
-    it "should have correct CA title" do
+    it "should have correct title" do
       doc = TestClimfit.get_noko "http://climateaudit.org"
       assert_equal "Climate Audit", doc.title.strip
     end
     
-    it "should have correct WUWT title" do
+  end
+    
+  describe "WUWT" do
+    
+    it "should have correct title" do
       doc = TestClimfit.get_noko(
         "http://wattsupwiththat.com/2014/07/08/record-levels-of-solar-ultraviolet-measured-in-south-america/"
       )
