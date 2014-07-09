@@ -20,6 +20,11 @@ class TestClimfit < MiniTest::Test
       @driver.get(
         "http://wattsupwiththat.com/2014/07/08/record-levels-of-solar-ultraviolet-measured-in-south-america/"
       )
+      doc = Nokogiri::HTML(@driver.page_source)
+      assert_equal(
+        "Record levels of solar ultraviolet measured in South America | Watts Up With That?", 
+        doc.title.strip
+      )
     end
   end
 end
