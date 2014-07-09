@@ -14,23 +14,24 @@ class TestClimfit < MiniTest::Test
   end
 
   describe "CA" do
-    
     it "should have correct title" do
       doc = TestClimfit.get_noko "http://climateaudit.org"
       assert_equal "Climate Audit", doc.title.strip
     end
-    
   end
     
   describe "WUWT" do
     
-    it "should have correct title" do
-      doc = TestClimfit.get_noko(
+    before do
+      @doc = TestClimfit.get_noko(
         "http://wattsupwiththat.com/2014/07/08/record-levels-of-solar-ultraviolet-measured-in-south-america/"
       )
+    end
+
+    it "should have correct title" do 
       assert_equal(
         "Record levels of solar ultraviolet measured in South America | Watts Up With That?", 
-        doc.title.strip
+        @doc.title.strip
       )
     end
   end
