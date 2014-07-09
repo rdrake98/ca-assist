@@ -9,6 +9,10 @@ class TestClimfit < MiniTest::Test
       @driver = Selenium::WebDriver.for :firefox, profile: "caa"
     end
     
+    after do
+      @driver.quit
+    end
+    
     it "should have correct title" do
       @driver.get "http://climateaudit.org"
       doc = Nokogiri::HTML(@driver.page_source)
