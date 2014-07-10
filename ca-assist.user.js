@@ -813,14 +813,12 @@ function updateScript() {
         var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : '';
         if (theOtherBuild < runningBuild) {
           if (window.confirm('You have a beta version (build ' + runningBuild + ') installed.\n\nDo you want to DOWNGRADE to the most recent official release (version ' + theOtherVersion + ')?\n')) {
-            //clearSettings();
             window.location.href = SCRIPT.url;
           }
           return;
         } else if (theOtherBuild > runningBuild ||
                    theOtherVersion != SCRIPT.version) {
           if (window.confirm('Version ' + theOtherVersion + ' is available!\n\n' + 'Do you want to upgrade?' + '\n')) {
-            //clearSettings();
             window.location.href = SCRIPT.url;
           }
         } else {
@@ -853,18 +851,6 @@ function makeElement(type, appendto, attributes, checked, chkdefault) {
   return element;
 }
 
-
-// Toggle checkbox element and return true if it is checked
-function toggleCheckElt(eltId) {
-  if (isChecked(eltId)) {
-    GM_setValue(eltId, '0');
-    return false;
-  } else {
-    GM_setValue(eltId, 'checked');
-    return true;
-  }
-}
-
 // Save an array of checkbox elements
 function saveCheckBoxElementArray(arrayEltIds) {
   for (var i=0; i<arrayEltIds.length; i++)
@@ -879,27 +865,5 @@ function saveCheckBoxElement(eltId) {
   } else {
     GM_setValue(eltId, 0);
     return false;
-  }
-}
-
-// Check if a GM value is the same as the passed value
-function isSame (gmName, gmValue) {
-  return GM_getValue(gmName) == gmValue;
-}
-
-// Check if a GM value is checked or not
-function isChecked (gmName) {
-  return isSame (gmName, 'checked');
-}
-
-function clearSettings() {
-  if (typeof GM_listValues == 'function' &&
-      typeof GM_deleteValue == 'function') {
-    var values = GM_listValues();
-    for (var i in values) {
-      GM_deleteValue(values[i]);
-    }
-  } else {
-    alert('In order to do this you need at least GreaseMonkey version: 0.8.20090123.1. Please upgrade and try again.');
   }
 }
