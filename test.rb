@@ -1,6 +1,7 @@
 require 'selenium-webdriver'
 require 'minitest/autorun'
 require 'nokogiri'
+require 'pry'
 
 class TestClimfit < MiniTest::Test
   
@@ -21,9 +22,10 @@ class TestClimfit < MiniTest::Test
       assert_equal "Phunny Physics | Climate Etc.", @@ce.title.strip
     end
 
-    it "should have comments" do 
+    it "should have all comments coloured" do 
       comments = @@ce.css '.highlander-comment'
-      assert_equal nil, comments.size
+      binding.pry
+      assert_equal nil, comments[comments.size - 1]
     end
   end
 
