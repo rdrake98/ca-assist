@@ -15,7 +15,7 @@ class TestClimfit < MiniTest::Test
   end
 
   describe "CE" do
-    
+    # page with at least two pingbacks
     @@ce = TestClimfit.get_noko "http://judithcurry.com/2014/07/06/phunny-physics/"
 
     it "should have correct title" do 
