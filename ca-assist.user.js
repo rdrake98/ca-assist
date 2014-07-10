@@ -778,14 +778,14 @@ function helpSettings() {
 
 function saveSettings() {
 
-  bColorAge = document.getElementById('bColorAge').checked
-  bHideOld = document.getElementById('bHideOld').checked
-  bShowThreads = document.getElementById('bShowThreads').checked
-  bRecentLast = document.getElementById('bRecentLast').checked
-  bEnableOrder = document.getElementById('bEnableOrder').checked
-  bReorgRcntCmt = document.getElementById('bReorgRcntCmt').checked
-  isNew = document.getElementById('isNew').value
-  isOld = document.getElementById('isOld').value
+  bColorAge = $j('#bColorAge')[0].checked
+  bHideOld = $j('#bHideOld')[0].checked
+  bShowThreads = $j('#bShowThreads')[0].checked
+  bRecentLast = $j('#bRecentLast')[0].checked
+  bEnableOrder = $j('#bEnableOrder')[0].checked
+  bReorgRcntCmt = $j('#bReorgRcntCmt')[0].checked
+  isNew = $j('#isNew')[0].value
+  isOld = $j('#isOld')[0].value
 
   GM_setValue ('isNew', isNew);
   GM_setValue ('isOld', isOld);
