@@ -778,14 +778,14 @@ function helpSettings() {
 
 function saveSettings() {
 
-  bColorAge      = (document.getElementById('bColorAge').checked === true);
-  bHideOld      = (document.getElementById('bHideOld').checked === true);
-  bShowThreads      = (document.getElementById('bShowThreads').checked === true);
-  bRecentLast  = (document.getElementById('bRecentLast').checked === true);
-  bEnableOrder  = (document.getElementById('bEnableOrder').checked === true);
-  bReorgRcntCmt = (document.getElementById('bReorgRcntCmt').checked === true);
-  isNew      = document.getElementById('isNew').value;
-  isOld      = document.getElementById('isOld').value;
+  bColorAge = document.getElementById('bColorAge').checked
+  bHideOld = document.getElementById('bHideOld').checked
+  bShowThreads = document.getElementById('bShowThreads').checked
+  bRecentLast = document.getElementById('bRecentLast').checked
+  bEnableOrder = document.getElementById('bEnableOrder').checked
+  bReorgRcntCmt = document.getElementById('bReorgRcntCmt').checked
+  isNew = document.getElementById('isNew').value
+  isOld = document.getElementById('isOld').value
 
   GM_setValue ('isNew', isNew);
   GM_setValue ('isOld', isOld);
