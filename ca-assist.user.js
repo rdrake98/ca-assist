@@ -428,13 +428,11 @@ function AgeComment(elm) {
   }
 
 function FixComment(i) {
-  console.log(this.id)
-  console.log($j.isEmptyObject(this.id))
-  console.log(empty(this.id))
-  setReplyLink(this); // only need to do this one time
-  if (bHideOld || bColorAge) AgeComment(this);
+  if (!empty(this.id)) {
+    setReplyLink(this) // only need to do this one time
+    if (bHideOld || bColorAge) AgeComment(this)
+  }
 }
-
 
 function setupComments() {
   console.log(cmtForm.listElm)
