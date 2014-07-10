@@ -208,6 +208,40 @@ if (!initialized) {
 
 customizeMasthead();
 
+function handleVersionChange() {
+  GM_setValue('version', SCRIPT.version);
+  GM_setValue('build', SCRIPT.build);
+  // Check for invalid settings and upgrade them.
+}
+
+function saveDefaultSettings() {
+  // Assume all settings have been cleared and set defaults.
+  // For groups of radio buttons, one must be checked and all others cleared.
+  // For checkboxes, no need to default if the option should be off.
+
+  // General tab.
+
+  GM_setValue('isNew', '8');
+  GM_setValue('isOld', '24');
+  GM_setValue("bColorAge",'checked');
+  GM_setValue("bHideOld",'checked');
+  GM_setValue("bShowThreads",'checked');
+  GM_setValue("bRecentLast",'checked');
+  GM_setValue("bEnableOrder",'checked');
+  GM_setValue("bReorgRcntCmt",'checked');
+
+}
+
+function refreshSettings() {
+  bColorAge    = GM_getValue('bColorAge','checked');
+  bHideOld     = GM_getValue('bHideOld','checked');
+  bShowThreads = GM_getValue('bShowThreads','checked');
+  bRecentLast  = GM_getValue('bRecentLast','checked');
+  bEnableOrder  = GM_getValue('bEnableOrder','checked');
+  bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
+  isNew      = GM_getValue('isNew',8);
+  isOld      = GM_getValue('isOld',48);
+}
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
@@ -738,31 +772,6 @@ var sThreadDisplay = ''+
   return generalTab;
 }
 
-
-function handleVersionChange() {
-  GM_setValue('version', SCRIPT.version);
-  GM_setValue('build', SCRIPT.build);
-  // Check for invalid settings and upgrade them.
-}
-
-function saveDefaultSettings() {
-  // Assume all settings have been cleared and set defaults.
-  // For groups of radio buttons, one must be checked and all others cleared.
-  // For checkboxes, no need to default if the option should be off.
-
-  // General tab.
-
-  GM_setValue('isNew', '8');
-  GM_setValue('isOld', '24');
-  GM_setValue("bColorAge",'checked');
-  GM_setValue("bHideOld",'checked');
-  GM_setValue("bShowThreads",'checked');
-  GM_setValue("bRecentLast",'checked');
-  GM_setValue("bEnableOrder",'checked');
-  GM_setValue("bReorgRcntCmt",'checked');
-
-}
-
 function helpSettings() {
   window.open('http://climateaudit.org/ca-assistant/');
 }
@@ -783,17 +792,6 @@ function saveSettings() {
   saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
 
   toggleSettingsBox();
-}
-
-function refreshSettings() {
-  bColorAge    = GM_getValue('bColorAge','checked');
-  bHideOld     = GM_getValue('bHideOld','checked');
-  bShowThreads = GM_getValue('bShowThreads','checked');
-  bRecentLast  = GM_getValue('bRecentLast','checked');
-  bEnableOrder  = GM_getValue('bEnableOrder','checked');
-  bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
-  isNew      = GM_getValue('isNew',8);
-  isOld      = GM_getValue('isOld',48);
 }
 
 //update the script (by Richard Gibson; changed by ms99 and blannie)
