@@ -77,6 +77,32 @@ String.prototype.untag = function() {
   return this.replace(/<[^>]+>/g, '');
 }
 
+// thanks James Edwards, http://www.sitepoint.com/testing-for-empty-values/
+
+function empty(data)
+{
+  if(typeof(data) == 'number' || typeof(data) == 'boolean')
+  {
+    return false;
+  }
+  if(typeof(data) == 'undefined' || data === null)
+  {
+    return true;
+  }
+  if(typeof(data.length) != 'undefined')
+  {
+    return data.length == 0;
+  }
+  var count = 0;
+  for(var i in data)
+  {
+    if(data.hasOwnProperty(i))
+    {
+      count ++;
+    }
+  }
+  return count == 0;
+}
 
 /* **************************************************
            Sort the comment tree
@@ -402,6 +428,9 @@ function AgeComment(elm) {
   }
 
 function FixComment(i) {
+  console.log(this.id)
+  console.log($j.isEmptyObject(this.id))
+  console.log(empty(this.id))
   setReplyLink(this); // only need to do this one time
   if (bHideOld || bColorAge) AgeComment(this);
 }
