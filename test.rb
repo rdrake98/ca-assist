@@ -5,7 +5,7 @@ require 'pry'
 
 class TestClimfit < MiniTest::Test
   
-  @@driver = Selenium::WebDriver.for :firefox, profile: "caa"
+  @@driver = Selenium::WebDriver.for :firefox, profile: "climfit"
 
   Minitest.after_run { @@driver.quit }
   
@@ -24,8 +24,8 @@ class TestClimfit < MiniTest::Test
 
     it "should have all comments coloured" do 
       comments = @@ce.css '.highlander-comment'
-      binding.pry
-      assert_equal nil, comments[comments.size - 1]
+      coloured = comments.css '.cmtOld,.cmtNorm,.cmtNew'
+      assert_equal comments.size, coloured.size
     end
   end
 

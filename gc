@@ -1,3 +1,4 @@
 #!/bin/bash
 
 rsync -av ca-assist.user.js "$profile/gm_scripts/ca-assist-local/"
+rsync -av ca-assist.user.js "$profile_climfit/gm_scripts/ca-assist-local/"
