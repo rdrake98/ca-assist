@@ -496,22 +496,6 @@ function DEBUG(line) {
   dump(logDate() + ' ' + line +'\n')
 }
 
-function showIfUnchecked(setting) {
-  if (setting == '0') {
-    setting = 'unchecked';
-  }
-  return setting;
-}
-
-function showIfSelected(setting) {
-  if (setting == '0') {
-    setting = 'not selected';
-  } else {
-    setting = 'selected';
-  }
-  return setting;
-}
-
 function stripURI(img) {
   img = img.split('"')[1];
   return img.replace('" />', '');
