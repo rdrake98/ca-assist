@@ -37,6 +37,8 @@
 // ==UserScript==
 // @name        ca-assist-local
 // @namespace   ca-assist
+// @grant       GM_getValue
+// @grant       GM_setValue
 // @description Enhances user experience on Open Science Web Ring courtesy of Climate Audit
 // @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
