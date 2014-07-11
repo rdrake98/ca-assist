@@ -597,6 +597,24 @@ function createSettingsBox() {
   DEBUG('Menu created.');
 }
 
+function makeElement(type, appendto, attributes, checked, chkdefault) {
+  var element = document.createElement(type);
+  if (attributes != null) {
+    for (var i in attributes) {
+      element.setAttribute(i, attributes[i]);
+    }
+  }
+  if (checked != null) {
+    if (GM_getValue(checked, chkdefault) == 'checked') {
+      element.setAttribute('checked', 'checked');
+    }
+  }
+  if (appendto) {
+    appendto.appendChild(element);
+  }
+  return element;
+}
+
 function checked(bool) {
   return bool ? ' checked="checked"' : ''
 }
@@ -760,23 +778,4 @@ function updateScript() {
     });
   } catch (ex) {
   }
-}
-
-
-function makeElement(type, appendto, attributes, checked, chkdefault) {
-  var element = document.createElement(type);
-  if (attributes != null) {
-    for (var i in attributes) {
-      element.setAttribute(i, attributes[i]);
-    }
-  }
-  if (checked != null) {
-    if (GM_getValue(checked, chkdefault) == 'checked') {
-      element.setAttribute('checked', 'checked');
-    }
-  }
-  if (appendto) {
-    appendto.appendChild(element);
-  }
-  return element;
 }
