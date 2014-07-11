@@ -613,6 +613,10 @@ function createSettingsBox() {
   DEBUG('Menu created.');
 }
 
+function checked(bool) {
+  return bool ? ' checked="checked"' : ''
+}
+
 // Create General Tab
 function createGeneralTab() {
   var title, id, label;
@@ -628,8 +632,7 @@ function createGeneralTab() {
 '   <label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Commenter by thread:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
-(bReorgRcntCmt=='checked' ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+checked(bReorgRcntCmt)+'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -656,7 +659,7 @@ function createGeneralTab() {
 '   <label for="bColorAge" title="Check to color newer comments according to indicated time intervals.">Color new comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( bColorAge=='checked' ? ' checked="checked"' : '') + '/>\n'+
+'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + checked(bColorAge) + '/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -665,7 +668,7 @@ function createGeneralTab() {
 '   <label for="bHideOld" title="Check to hide older comments."> Hide old comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( bHideOld=='checked' ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' + checked(bHideOld) +'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -682,7 +685,7 @@ var sThreadDisplay = ''+
 '   <label for="bEnableOrder" title="Check to enable comment reordering">Enable reordering:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( bEnableOrder=='checked' ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' + checked(bEnableOrder) +'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -690,7 +693,7 @@ var sThreadDisplay = ''+
 '   <label for="bShowThreads" title="Use threaded display for comments (if site supports it)"> Threaded display:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( bShowThreads=='checked' ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' + checked(bShowThreads) +'/>\n'+
 '   <label title="Use threaded display for comments (if site supports it)"> (if site supports it)</label>\n'+
 ' </div>\n'+
 '</div>\n'+
@@ -700,7 +703,7 @@ var sThreadDisplay = ''+
 '   <label for="bRecentLast" title="Check to show most-recent comments at the end">Newest at end:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( bRecentLast=='checked' ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' + checked(bRecentLast) +'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -726,9 +729,14 @@ function saveSettings() {
   bEnableOrder = $j('#bEnableOrder')[0].checked
   bReorgRcntCmt = $j('#bReorgRcntCmt')[0].checked
 
-  GM_setValue ('isNew', isNew);
-  GM_setValue ('isOld', isOld);
-  saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
+  GM_setValue('isNew', isNew)
+  GM_setValue('isOld', isOld)
+  GM_setValue('bColorAge', bColorAge)
+  GM_setValue('bHideOld', bHideOld)
+  GM_setValue('bShowThreads', bShowThreads)
+  GM_setValue('bRecentLast', bRecentLast)
+  GM_setValue('bEnableOrder', bEnableOrder)
+  GM_setValue('bReorgRcntCmt', bReorgRcntCmt)
 
   toggleSettingsBox();
 }
@@ -787,21 +795,4 @@ function makeElement(type, appendto, attributes, checked, chkdefault) {
     appendto.appendChild(element);
   }
   return element;
-}
-
-// Save an array of checkbox elements
-function saveCheckBoxElementArray(arrayEltIds) {
-  for (var i=0; i<arrayEltIds.length; i++)
-    saveCheckBoxElement(arrayEltIds[i])
-}
-
-// Save checkbox element and return true if it is checked
-function saveCheckBoxElement(eltId) {
-  if (document.getElementById(eltId).checked === true) {
-    GM_setValue(eltId, 'checked');
-    return true;
-  } else {
-    GM_setValue(eltId, 0);
-    return false;
-  }
 }
