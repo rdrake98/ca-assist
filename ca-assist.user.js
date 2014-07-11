@@ -469,7 +469,7 @@ function customizeMasthead() {
     '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
     '<span id="wpa_settings">'+wpaTitle+'</span></div>');
 
-  $j('span#wpa_settings').click(toggleSettingsBox);
+  $j('span#wpa_settings').click(toggleSettings);
 
 }
 
@@ -508,30 +508,20 @@ function stripURI(img) {
 // ********************************************************************
 // ********************************************************************
 
-function toggleSettingsBox() {
-  if (settingsOpen === false) {
-    settingsOpen = true;
-    createSettingsBox();
-    showSettingsBox();
-  } else {
-    settingsOpen = false;
-    destroySettingsBox();
-
-  }
+function toggleSettings() {
+  settingsOpen ? closeSettings() : showSettings()
 }
 
-function showSettingsBox() {
-  var settingsBoxContainer = document.getElementById('wpa_settingsBox');
-  if (settingsBoxContainer) {
-    settingsBoxContainer.style.display = 'block';
-  }
+function showSettings() {
+  createSettingsBox()
+  document.getElementById('wpa_settingsBox').style.display = 'block'
+  settingsOpen = true
 }
 
-function destroySettingsBox() {
-  var settingsBoxContainer = document.getElementById('wpa_settingsBox');
-  if (settingsBoxContainer) {
-    settingsBoxContainer.parentNode.removeChild(settingsBoxContainer);
-  }
+function closeSettings() {
+  var settingsBoxContainer = document.getElementById('wpa_settingsBox')
+  settingsBoxContainer.parentNode.removeChild(settingsBoxContainer)
+  settingsOpen = false
 }
 
 function createSettingsBox() {
@@ -579,7 +569,7 @@ function createSettingsBox() {
   settingsBox.appendChild(generalTab);
 
   makeButton(settingsBox, 'left: 10px', 'Show', saveSettings)
-  makeButton(settingsBox, 'left: 95px', 'Cancel', toggleSettingsBox)
+  makeButton(settingsBox, 'left: 95px', 'Cancel', closeSettings)
   makeButton(settingsBox, 'left: 190px', 'Help', helpSettings)
   makeButton(settingsBox, 'right: 10px', 'Check Update', updateScript)
   
@@ -727,7 +717,7 @@ function saveSettings() {
   GM_setValue('bEnableOrder', bEnableOrder)
   GM_setValue('bReorgRcntCmt', bReorgRcntCmt)
 
-  toggleSettingsBox()
+  closeSettings()
   
   location.reload()
 }
