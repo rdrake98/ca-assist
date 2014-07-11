@@ -51,13 +51,6 @@
 
 var $j = jQuery.noConflict();
 
-var SCRIPT = { // URL of the script for updates
-  url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
-  version: '0.1',
-  build: '42',
-  ajaxPage: 'inner2',
-};
-
 console.log('hostname: '+location.hostname)
 
 if (window.top != window.self) {  //don't run on frames or iframes
@@ -174,82 +167,32 @@ var redBgImage = '<img src="data:image/gif;base64,' +
 'E12G8GwiPU8oSD/ysZ3nhmofla7Vps4J74b0O9ZF2XU5+duqbcwjW8/OyYP+9Z5BLI0IAAA7' +
 '" />';
 
-var isNew = 8;     // a "new" comment is less than 8 hours ago
-var isOld = 24;     // an "old" comment is more than 48 hours (values are NOT the official defaults; just set her temporarily)
-var bShowThreads = 1; // default: do show threads
-var bRecentLast = 1; // default: show in oldest-to-recent order
-var bEnableOrder= 1; // default: do reorder comments
-var bHideOld = 1;   // default: do hide old comments
-var bColorAge = 1;    // default: do color comments by age
-var bReorgRcntCmt = 1; // default: reorganize recent comments widget
-
 //
 // INIT
 //
 
-if (!initialized) {
-  var settingsOpen = false;
-  if (GM_getValue('version') != SCRIPT.version ||
-      GM_getValue('build') != SCRIPT.build) {
-    handleVersionChange();
-  }
+var SCRIPT = { // URL of script for updates
+  url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
+  version: '0.1',
+  build: '42',
+  ajaxPage: 'inner2',
+};
 
-// Check for missing settings.
-  if (GM_getValue('isOld') == undefined) {
-    saveDefaultSettings();
-  }
-  refreshSettings();
+var settingsOpen = false;
 
-  var initialized = true;
-  DEBUG('Completed initialize.');
-} else {
-  alert('ALREADY INIT -- tell MrPete!');
-}
+var isNew = GM_getValue('isNew',8);
+var isOld = GM_getValue('isOld',24);
+var bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
+var bColorAge = GM_getValue('bColorAge','checked');
+var bHideOld = GM_getValue('bHideOld','checked');
+var bShowThreads = GM_getValue('bShowThreads','checked');
+var bRecentLast = GM_getValue('bRecentLast','checked');
+var bEnableOrder = GM_getValue('bEnableOrder','checked');
+
+DEBUG('Completed initialize.');
 
 customizeMasthead();
 
-function handleVersionChange() {
-  GM_setValue('version', SCRIPT.version);
-  GM_setValue('build', SCRIPT.build);
-  // Check for invalid settings and upgrade them.
-}
-
-function saveDefaultSettings() {
-  // Assume all settings have been cleared and set defaults.
-  // For groups of radio buttons, one must be checked and all others cleared.
-  // For checkboxes, no need to default if the option should be off.
-
-  // General tab.
-
-  GM_setValue('isNew', '8');
-  GM_setValue('isOld', '24');
-  GM_setValue("bColorAge",'checked');
-  GM_setValue("bHideOld",'checked');
-  GM_setValue("bShowThreads",'checked');
-  GM_setValue("bRecentLast",'checked');
-  GM_setValue("bEnableOrder",'checked');
-  GM_setValue("bReorgRcntCmt",'checked');
-
-}
-
-function refreshSettings() {
-  bColorAge    = GM_getValue('bColorAge','checked');
-  bHideOld     = GM_getValue('bHideOld','checked');
-  bShowThreads = GM_getValue('bShowThreads','checked');
-  bRecentLast  = GM_getValue('bRecentLast','checked');
-  bEnableOrder  = GM_getValue('bEnableOrder','checked');
-  bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
-  isNew      = GM_getValue('isNew',8);
-  isOld      = GM_getValue('isOld',48);
-}
-
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-// MISC FIXUPS ON ***ALL*** PAGES
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
 //
@@ -300,11 +243,7 @@ if (bReorgRcntCmt) {
 
 
 /////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-// AFTER THIS: functions ONLY on comment pages
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
+// functions on comment pages
 /////////////////////////////////////////////////////////////////
 
 
@@ -778,14 +717,14 @@ function helpSettings() {
 
 function saveSettings() {
 
+  isNew = $j('#isNew')[0].value
+  isOld = $j('#isOld')[0].value
   bColorAge = $j('#bColorAge')[0].checked
   bHideOld = $j('#bHideOld')[0].checked
   bShowThreads = $j('#bShowThreads')[0].checked
   bRecentLast = $j('#bRecentLast')[0].checked
   bEnableOrder = $j('#bEnableOrder')[0].checked
   bReorgRcntCmt = $j('#bReorgRcntCmt')[0].checked
-  isNew = $j('#isNew')[0].value
-  isOld = $j('#isOld')[0].value
 
   GM_setValue ('isNew', isNew);
   GM_setValue ('isOld', isOld);
