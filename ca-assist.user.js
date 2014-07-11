@@ -575,44 +575,36 @@ function createSettingsBox() {
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
   var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 400px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
-  // Create General tab.
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
 
-  // Create Save button
   var saveButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 10px; bottom: 10px;'});
-  makeElement('button', saveButton).appendChild(document.createTextNode('Save Settings'));
+  makeElement('button', saveButton).appendChild(document.createTextNode('Show'));
   saveButton.addEventListener('click', saveSettings, false);
 
-  // Create Help button
-  var helpButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 160px; bottom: 10px;'});
+  var cancelButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 95px; bottom: 10px;'});
+  makeElement('button', cancelButton).appendChild(document.createTextNode('Cancel'));
+  cancelButton.addEventListener('click', toggleSettingsBox, false);
+
+  var helpButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 190px; bottom: 10px;'});
   makeElement('button', helpButton).appendChild(document.createTextNode('Help'));
   helpButton.addEventListener('click', helpSettings, false);
 
-  // Create Update button
   var updateButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'right: 10px; bottom: 10px;'});
-  makeElement('button', updateButton).appendChild(document.createTextNode('Check for Updates'));
+  makeElement('button', updateButton).appendChild(document.createTextNode('Check Update'));
   updateButton.addEventListener('click', updateScript, false);
 
   DEBUG('Menu created.');
 }
 
-function makeElement(type, appendto, attributes, checked, chkdefault) {
-  var element = document.createElement(type);
-  if (attributes != null) {
-    for (var i in attributes) {
-      element.setAttribute(i, attributes[i]);
-    }
-  }
-  if (checked != null) {
-    if (GM_getValue(checked, chkdefault) == 'checked') {
-      element.setAttribute('checked', 'checked');
-    }
-  }
-  if (appendto) {
-    appendto.appendChild(element);
-  }
-  return element;
+function makeElement(type, appendto, attributes) {
+  var element = document.createElement(type)
+  if (attributes)
+    for (var i in attributes)
+      element.setAttribute(i, attributes[i])
+  if (appendto)
+    appendto.appendChild(element)
+  return element
 }
 
 function checked(bool) {
@@ -740,7 +732,9 @@ function saveSettings() {
   GM_setValue('bEnableOrder', bEnableOrder)
   GM_setValue('bReorgRcntCmt', bReorgRcntCmt)
 
-  toggleSettingsBox();
+  toggleSettingsBox()
+  
+  location.reload()
 }
 
 //update the script (by Richard Gibson; changed by ms99 and blannie)
