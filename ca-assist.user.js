@@ -629,7 +629,7 @@ function createGeneralTab() {
 ' </div>\n'+
 ' <div class="rhs">\n'+
 '   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
-((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+(bReorgRcntCmt=='checked' ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -644,9 +644,9 @@ function createGeneralTab() {
 '   <label for="isNew" title="Comment ages for coloring and hiding.">Define comment ages:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="isNew" type="text" value="'+GM_getValue('isNew', '24')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <input id="isNew" type="text" value="'+isNew+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
 '   <label for="bHideOld"> (new) to </label><br/>\n'+
-'   <input id="isOld" type="text" value="'+GM_getValue('isOld', '72')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <input id="isOld" type="text" value="'+isOld+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
 '   <label for="bHideOld"> (old) hours.</label>\n'+
 ' </div>\n'+
 '</div>\n'+
@@ -656,7 +656,7 @@ function createGeneralTab() {
 '   <label for="bColorAge" title="Check to color newer comments according to indicated time intervals.">Color new comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( (GM_getValue("bColorAge",'checked')=='checked') ? ' checked="checked"' : '') + '/>\n'+
+'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( bColorAge=='checked' ? ' checked="checked"' : '') + '/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -665,7 +665,7 @@ function createGeneralTab() {
 '   <label for="bHideOld" title="Check to hide older comments."> Hide old comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( (GM_getValue("bHideOld",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( bHideOld=='checked' ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -682,7 +682,7 @@ var sThreadDisplay = ''+
 '   <label for="bEnableOrder" title="Check to enable comment reordering">Enable reordering:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( (GM_getValue("bEnableOrder",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( bEnableOrder=='checked' ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -690,7 +690,7 @@ var sThreadDisplay = ''+
 '   <label for="bShowThreads" title="Use threaded display for comments (if site supports it)"> Threaded display:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( (GM_getValue("bShowThreads",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( bShowThreads=='checked' ? ' checked="checked"' : '')+'/>\n'+
 '   <label title="Use threaded display for comments (if site supports it)"> (if site supports it)</label>\n'+
 ' </div>\n'+
 '</div>\n'+
@@ -700,7 +700,7 @@ var sThreadDisplay = ''+
 '   <label for="bRecentLast" title="Check to show most-recent comments at the end">Newest at end:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( (GM_getValue("bRecentLast",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( bRecentLast=='checked' ? ' checked="checked"' : '')+'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -769,7 +769,6 @@ function updateScript() {
   } catch (ex) {
   }
 }
-
 
 
 function makeElement(type, appendto, attributes, checked, chkdefault) {
