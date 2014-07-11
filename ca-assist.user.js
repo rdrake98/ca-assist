@@ -578,23 +578,18 @@ function createSettingsBox() {
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
 
-  var saveButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 10px; bottom: 10px;'});
-  makeElement('button', saveButton).appendChild(document.createTextNode('Show'));
-  saveButton.addEventListener('click', saveSettings, false);
-
-  var cancelButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 95px; bottom: 10px;'});
-  makeElement('button', cancelButton).appendChild(document.createTextNode('Cancel'));
-  cancelButton.addEventListener('click', toggleSettingsBox, false);
-
-  var helpButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 190px; bottom: 10px;'});
-  makeElement('button', helpButton).appendChild(document.createTextNode('Help'));
-  helpButton.addEventListener('click', helpSettings, false);
-
-  var updateButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'right: 10px; bottom: 10px;'});
-  makeElement('button', updateButton).appendChild(document.createTextNode('Check Update'));
-  updateButton.addEventListener('click', updateScript, false);
-
+  makeButton(settingsBox, 'left: 10px', 'Show', saveSettings)
+  makeButton(settingsBox, 'left: 95px', 'Cancel', toggleSettingsBox)
+  makeButton(settingsBox, 'left: 190px', 'Help', helpSettings)
+  makeButton(settingsBox, 'right: 10px', 'Check Update', updateScript)
+  
   DEBUG('Menu created.');
+}
+
+function makeButton(settingsBox, position, name, action) {
+  var button = makeElement('span', settingsBox, {'class':'fancy_button', 'style':position+'; bottom: 10px;'})
+  makeElement('button', button).appendChild(document.createTextNode(name))
+  button.addEventListener('click', action, false)
 }
 
 function makeElement(type, appendto, attributes) {
