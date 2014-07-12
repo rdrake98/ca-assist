@@ -72,7 +72,7 @@ String.prototype.untag = function() {
   return this.replace(/<[^>]+>/g, '');
 }
 
-// thanks James Edwards, http://www.sitepoint.com/testing-for-empty-values/
+// from James Edwards, http://www.sitepoint.com/testing-for-empty-values/
 
 function empty(data)
 {
