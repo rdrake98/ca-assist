@@ -40,17 +40,24 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_getResourceText
+// @grant       GM_xmlhttpRequest
 // @description Enhances user experience on climate blogs courtesy of Climate Audit and MrPete
 // @copyright   2009+, MrPete, Richard Drake and friends. All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
 // @include     http://judithcurry.com/*
-// @include     http://dev.whiteword.com/climfit/*
+// @include     http://dev.whiteword.com/assist/*
 // @version     0.1
 // @require     jquery.min.js
 // @require     images.js
 // @resource    styles styles.css
 // ==/UserScript==
+
+var SCRIPT = { // URL of script for updates
+  url: 'https://github.com/rdrake98/ca-assist/raw/master/assist.user.js',
+  version: '0.1',
+  build: '43',
+}
 
 var $j = jQuery.noConflict()
 
@@ -126,13 +133,6 @@ function getCmtDate(elm) {
 //
 // INIT
 //
-
-var SCRIPT = { // URL of script for updates
-  url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
-  version: '0.1',
-  build: '42',
-  ajaxPage: 'inner2',
-};
 
 var settingsOpen = false;
 
@@ -678,44 +678,6 @@ function saveSettings() {
   location.reload()
 }
 
-//update the script (by Richard Gibson; changed by ms99 and blannie)
-function updateScript() {
-  try {
-    if (!GM_getValue) {
-      return; // Only do this inside GM
-    }
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url: SCRIPT.url + '?source', // don't increase the 'installed' count; just for checking
-      onload: function(result) {
-        if (result.status != 200) {
-          return;
-        }
-        if (!result.responseText.match(/build:\s+'(\d+)/)) return;
-        var theOtherBuild = parseInt(RegExp.$1);
-        var runningBuild = parseInt(SCRIPT.build);
-        var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : '';
-        if (theOtherBuild < runningBuild) {
-          if (window.confirm('You have a beta version (build ' + runningBuild + ') installed.\n\nDo you want to DOWNGRADE to the most recent official release (version ' + theOtherVersion + ')?\n')) {
-            window.location.href = SCRIPT.url;
-          }
-          return;
-        } else if (theOtherBuild > runningBuild ||
-                   theOtherVersion != SCRIPT.version) {
-          if (window.confirm('Version ' + theOtherVersion + ' is available!\n\n' + 'Do you want to upgrade?' + '\n')) {
-            window.location.href = SCRIPT.url;
-          }
-        } else {
-          alert('You already have the latest version.');
-          return;
-        }
-      }
-    });
-  } catch (ex) {
-  }
-}
-
-
 $j(document).ready(function() {
 
 		var show_text = 'Preview';
@@ -859,4 +821,41 @@ $j(document).ready(function() {
 		return false;
 	})
 
-	}) 
+}) 
+
+//update the script (by Richard Gibson; changed by ms99 and blannie)
+function updateScript() {
+  try {
+    console.log('try')
+    GM_xmlhttpRequest({
+      method: 'GET',
+      url: SCRIPT.url + '?source', // don't increase the 'installed' count; just for checking
+      onload: function(result) {
+        console.log('onload')
+        if (result.status != 200) {
+          return;
+        }
+        if (!result.responseText.match(/build:\s+'(\d+)/)) return;
+        var theOtherBuild = parseInt(RegExp.$1);
+        var runningBuild = parseInt(SCRIPT.build);
+        var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : '';
+        if (theOtherBuild < runningBuild) {
+          if (window.confirm('You have a beta version (build ' + runningBuild + ') installed.\n\nDo you want to DOWNGRADE to the most recent official release (version ' + theOtherVersion + ')?\n')) {
+            window.location.href = SCRIPT.url;
+          }
+          return;
+        } else if (theOtherBuild > runningBuild ||
+                   theOtherVersion != SCRIPT.version) {
+          if (window.confirm('Version ' + theOtherVersion + ' is available!\n\n' + 'Do you want to upgrade?' + '\n')) {
+            window.location.href = SCRIPT.url;
+          }
+        } else {
+          alert('You already have the latest version.');
+          return;
+        }
+      }
+    });
+  } catch (ex) {
+    console.log(ex)
+  }
+}
