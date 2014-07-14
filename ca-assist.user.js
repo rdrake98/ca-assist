@@ -47,8 +47,8 @@
 // @include     http://judithcurry.com/*
 // @include     http://dev.whiteword.com/climfit/*
 // @version     0.1
-// @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist/jquery.min.js
-// @require     file:///Users/richarddrake/ww/dev/code/firefox/ca-assist/ca-assist-comment.js
+// @require     jquery.min.js
+// @require     ca-assist-comment.js
 // ==/UserScript==
 
 var $j = jQuery.noConflict();

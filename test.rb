@@ -7,7 +7,7 @@ class TestClimfit < MiniTest::Test
   
   @@driver = Selenium::WebDriver.for :firefox, profile: "climfit"
 
-  Minitest.after_run { @@driver.quit }
+  # Minitest.after_run { @@driver.quit }
   
   def self.get_noko(url)
     @@driver.get url
