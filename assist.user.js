@@ -39,37 +39,38 @@
 // @namespace   ca-assist
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @description Enhances user experience on climate blogs courtesy of Climate Audit and Mr Pete
-// @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
+// @grant       GM_getResourceText
+// @description Enhances user experience on climate blogs courtesy of Climate Audit and MrPete
+// @copyright   2009+, MrPete, Richard Drake and friends. All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
-// @include     http://www.climateaudit.org/*
 // @include     http://judithcurry.com/*
 // @include     http://dev.whiteword.com/climfit/*
 // @version     0.1
 // @require     jquery.min.js
 // @require     images.js
+// @resource    styles styles.css
 // ==/UserScript==
 
-var $j = jQuery.noConflict();
+var $j = jQuery.noConflict()
 
-$j('head').append("<link href='http://www.climateaudit.info/ca-assist/ca-assist.css' type='text/css' rel='stylesheet'>"); // grab CSS for the mess we're about to create...
+$j('head').append("<style>\n" + GM_getResourceText('styles') + "\n</style>") 
 
 console.log('hostname: '+location.hostname)
 
 if (window.top != window.self) return //don't run on frames or iframes
 
 String.prototype.trim = function() {
-  return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 }
 String.prototype.ltrim = function() {
-  return this.replace(/^\s\s*/, '');
+  return this.replace(/^\s\s*/, '')
 }
 String.prototype.rtrim = function() {
-  return this.replace(/\s\s*$/, '');
+  return this.replace(/\s\s*$/, '')
 }
 String.prototype.untag = function() {
-  return this.replace(/<[^>]+>/g, '');
+  return this.replace(/<[^>]+>/g, '')
 }
 
 function empty(data) {
