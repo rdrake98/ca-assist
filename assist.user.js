@@ -56,14 +56,14 @@
 var SCRIPT = { // URL of script for updates
   url: 'https://github.com/rdrake98/ca-assist/raw/master/assist.user.js',
   version: '0.1',
-  build: '43',
+  build: '44',
 }
 
 var $j = jQuery.noConflict()
 
 $j('head').append("<style>\n" + GM_getResourceText('styles') + "\n</style>") 
 
-console.log('hostname: '+location.hostname)
+console.log('hostname: ' + location.hostname)
 
 if (window.top != window.self) return //don't run on frames or iframes
 
@@ -100,7 +100,7 @@ switch(location.hostname) {
     siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
     break;
 }
-console.log('Site type: '+siteType)
+console.log('Site type: ' + siteType)
 
 //listID   where to find the comment list
 //bSeqDate True if date element precedes each comment element (WUWT)
