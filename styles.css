@@ -1,0 +1,121 @@
+#ca-cmt-wrap {
+	width: 100%;
+}
+textarea#comment {
+	width: 98% !important;
+	}
+	
+#ca-cmt-preview {
+	position: relative;
+	overflow: hidden;
+	background: #EEE;
+	height: 22px;
+	padding: 3px;
+	border: solid #D6D3D3;
+	border-width: 1px 1px 0;
+}
+div#comment_preview {
+	border: 1px solid #D6D3D3;
+	padding: 3px;
+}
+ol#cmt-preview {
+	margin: 0;
+	padding: 7px 5px 0;
+	list-style: none;
+	background: #FFF;
+}
+#cmt-preview .cmt-author {
+	padding: 0 0 12px;
+  line-height: 24px;
+}
+#cmt-preview p {
+	padding: 0;
+	margin: 0 0 18px;
+}
+#preview-tab {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+}
+#preview-tab div {
+	float: right;
+	background: #FFF;
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 1;
+}
+#preview-tab a {
+	float: left;
+	text-decoration: none;
+	padding: 4px 7px;
+	border: 1px solid #E4E4E4;
+	border-right: 1px solid #C9C9C9;
+	border-bottom: 1px solid #C9C9C9;
+}
+#preview-tab a:hover {
+	background: #FEF8C7;
+}
+#preview-tab a:active {
+	border: 1px solid #DDD;
+	border-right: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E9E9E9;
+}
+#textarea_clone {
+	height: 0;
+	overflow: hidden;
+}
+
+#html-editor button {
+	float: left;
+	display: inline;
+	margin-right: 3px;
+	width: 22px;
+	height: 22px;
+	border: none;
+	cursor: pointer;
+	border: 1px solid #E4E4E4;
+	border-right: 1px solid #C9C9C9;
+	border-bottom: 1px solid #C9C9C9;
+	background-color: #FFF !important;
+	padding: 1px;
+	position: relative;
+	z-index: 100;
+	background: #FFF url(http://climateaudit.files.wordpress.com/2010/01/ca-sprite.gif) no-repeat;
+	font-size: 999px;
+	overflow: hidden;
+}
+#html-editor button:hover {
+	background-color: #CACAFF !important;
+}
+#html-editor button:active {
+	border: 1px solid #DDD;
+	border-right: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E9E9E9;
+}
+button#ed_strong {background-position: 1px 1px}
+button#ed_em {background-position: 1px -17px}
+button#ed_under {background-position: 1px -35px}
+button#ed_del {background-position: 1px -53px}
+button#ed_sup {background-position: 1px -72px}
+button#ed_sub {background-position: 1px -89px}
+button#ed_img {background-position: 1px -107px}
+button#ed_link {background-position: 1px -125px}
+button#ed_blockquote {background-position: 1px -143px}
+button#ed_code {background-position: 1px -161px}
+button#ed_lt {background-position: 1px -179px}
+button#ed_latex {background-position: 1px -197px}
+
+/* Header */
+#wpa_menu span:hover{text-decoration:underline}
+#wpa_menu span{font-size: 12px; font-weight: bold; cursor: pointer; color: #FFD927}
+.wpa_optgroup1 {background-color: #FFFF77; text-align: center; color: #000000; font-weight: bold; font-size: 11px}
+.wpa_optgroup2 {background-color: #996633; text-align: center; color: #FFFFFF; font-size: 10px}
+.wpa_option    {font-size: 10px; cursor: default;}
+.wpa_option:hover {background-color:#660000;}
+
+.cmtOld .comment-author, .cmtOld cite { color: #777; background-color: #ccc; }
+.cmtNorm .comment-author, .cmtNorm cite { background-color: #ffc; }
+.cmtNew .comment-author, .cmtNew cite { background-color: #bfb; }
+
+h4.recentCommentsPostTitle { margin-bottom: 0;margin-top: 10px; padding-bottom: 0;padding-top:0; }
+h4.recentCommentsPostTitle ul { margin:0;padding:0; }

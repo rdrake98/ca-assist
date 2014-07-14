@@ -35,47 +35,58 @@
 //
 
 // ==UserScript==
-// @name        ca-assist
+// @name        Assist+
 // @namespace   ca-assist
-// @description Enhances user experience on Open Science Web Ring courtesy of Climate Audit
-// @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
+// @grant       GM_getValue
+// @grant       GM_setValue
+// @grant       GM_getResourceText
+// @grant       GM_xmlhttpRequest
+// @description Enhances user experience on climate blogs courtesy of Climate Audit and MrPete
+// @copyright   2009+, MrPete, Richard Drake and friends. All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
+// @include     http://climateaudit.org/*
 // @include     http://judithcurry.com/*
+// @include     http://dev.whiteword.com/assist/*
 // @version     0.1
-// @require     http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js
-// @require     https://raw.github.com/rdrake98/ca-assist/master/ca-assist-comment.js
+// @require     jquery.min.js
+// @require     images.js
+// @resource    styles styles.css
 // ==/UserScript==
 
-var $j = jQuery.noConflict();
-
-var SCRIPT = { // URL of the script for updates
-  url: 'https://github.com/rdrake98/ca-assist/raw/master/ca-assist.user.js',
+var SCRIPT = { // URL of script for updates
+  url: 'https://github.com/rdrake98/ca-assist/raw/master/assist.user.js',
   version: '0.1',
-  build: '42',
-  ajaxPage: 'inner2',
-};
+  build: '43',
+}
 
-var debug = false
+var $j = jQuery.noConflict()
+
+$j('head').append("<style>\n" + GM_getResourceText('styles') + "\n</style>") 
 
 console.log('hostname: '+location.hostname)
 
-if (window.top != window.self) {  //don't run on frames or iframes
-  return;
-}
+if (window.top != window.self) return //don't run on frames or iframes
 
 String.prototype.trim = function() {
-  return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 }
 String.prototype.ltrim = function() {
-  return this.replace(/^\s\s*/, '');
+  return this.replace(/^\s\s*/, '')
 }
 String.prototype.rtrim = function() {
-  return this.replace(/\s\s*$/, '');
+  return this.replace(/\s\s*$/, '')
 }
 String.prototype.untag = function() {
-  return this.replace(/<[^>]+>/g, '');
+  return this.replace(/<[^>]+>/g, '')
 }
 
+function empty(data) {
+  if (typeof(data) == 'number' || typeof(data) == 'boolean') return false
+  if (typeof(data) == 'undefined' || data === null) return true
+  if (typeof(data.length) != 'undefined') return data.length == 0
+  for (var i in data) if (data.hasOwnProperty(i)) return false
+  return true
+}
 
 /* **************************************************
            Sort the comment tree
@@ -83,7 +94,11 @@ String.prototype.untag = function() {
 
 var siteType='CA'
 switch(location.hostname) {
+  case 'climateaudit.org': siteType='CA'; break;
   case 'judithcurry.com': siteType='CE'; break;
+  case 'dev.whiteword.com':
+    siteType=location.pathname.split('/')[2].split('.')[0].slice(0,-1);
+    break;
 }
 console.log('Site type: '+siteType)
 
@@ -116,76 +131,24 @@ function getCmtDate(elm) {
 }
 
 //
-// ICON INITIALIZATIONS
-//
-
-//create data uris for mini icon usage
-
-var redBgImage =    '<img src="' +
-                    'data:image/gif;base64,' +
-                    'R0lGODlhZAAyALMAACIODyUQESYTFCkWGCwZHTMgJDckKDAdIDooLT4sMUw6QEY0OkEvNVJBSFlIUGFQWSH5BAAAAAAALAAAAABkADIAQAT/sC3EWBNFJYDcOoiiEMbSFIWjHJaGII9RxgwrURamcR4okiaUyuYK' +
-                    'jUqn1KqVeMVmNYbJ0FQMDonEwKBgFBAJxRexMGQUBikDYTaREI2BoEsILxbX7Lb7DY/LZ2kLCRlgYi+AIoJrBiEFd2ZkCAECBgcEcgQFVwgFJCgElwmYLwcFZgaahAShCAICCQYCpjKvmpyeZp6ipAi0p5+7db0H' +
-                    'ja0yB7SYBwIAAQMDAACsAAKYr9YBlATbBALQ4M6Y1dfglNDS1NaZ39De3wTOB+AFzNzb3fDO6OuvA97OnDWrNlBAAGmUEBqsdlDbQYHSXgWk9DAhwYgPJw60+CqjRYoM/52B5PjQYMWSKKVVU1nwpEKWCDOKxEgz' +
-                    'IsyQDp8dHLgSp0M5DYNqQ8iy4cKZF0dKPBgt6VGVRQW6dGq02c6SVhdSstpzqUMpGBoQKjHilANoHgiEKJOAgYJOCRw0aqAhwR25BNwyCFBA7KkFZQ2cHZB2LRW3cOVqKayALeICcefWvYOAhKVTNcZUNsXgm4Yt' +
-                    'TU6lQcGlHpjKjxIUS2MKsqUXmwt0HvCZSicZXk4doq3FtujcXGSUOvBWLZ5vBQyy4vavACVP1i6xGrDpyqblxTDVu2Runjvmmp7Ho27vlvVvpryFWk5dDvT1clIFWI9wQNWITeXss/pMGrqt+p3jX/80OglUUFML' +
-                    '6feNSd80BI1VAfYHwH8KQuPgTUiRJNVQBfHUElQZ8TQURDiZtNNLUm14IolamURUTy+O2GJDPYE0Y0Ai8hQQUjeuOBRFRtG4UZAYNmMcA/8MkYAEjYRRhwIN1KGCIGKs8UA9DsglBZQLHJnkCkuWYciTUcaFxpay' +
-                    'wTBCGGVOiaaVWGrJZTENvJCFGJApYI1YT04wQZRpLCECG2GIEWgAcMgFhh957jmKHZIA6hYLCzjwaGORkjCpW2+98FYbnbwVCwHFhdDJF3gccMcjfNi1AGQZaAHZAp5VRgYDMhSi1lsokHHFqoB54Wqadv36arCz' +
-                    'vkrIEm21ooX/KQl8w0Zl1CXwzKiNyGAJcKOk+RquyTRiTRZYRKKdtQNgywYy3GriRSrZskvaKFRcQsZrbLBiSSjJzFePHNS9YoY1qWByi71bbALCN5ZckQw0lvg7D3ICJ0fCdAerJUclFhfcXDUyBGBKMZnMo4kt' +
-                    'rGwTzSyZYByKcvZ4go47r3jyzCXwcLNONfOIFx3GzmlyDXusMDOfN//YckA6/+j0jTgGLRh1fvbNB/CDBvVMjkHmPEOgN+d0ZPXTXpNzdTYDalMOUGz/Y98sHemHokRO8YdgVnS7WCBILLZkIjYi3b2UV3enqI3d' +
-                    'KoU4VVcfznQ4iiMmXlPkBb0EZED2RdQ4/+Wa17SjQzHZJFJQG5VO0+OQjyhjTKRbrvePH+GN+kc8BgVi6CUSWXuGp8s0lVac4w58iJrndFXqk4vY+eEOKY8U8iGRuKNXHjlP/U0WAaBFB7G41SULDsyS1pJoZOEA' +
-                    'nWXStYAUDXhBglgDcB/o9wyEf8D4dFERF/p1NIB/+fszQAPS1xj2MeB9FqgBFeJAALpcQQKoQsMLGmCKAUKGLmgQjGke4IDKJLAYS/qHAw8AQTJIEA4VPAH5DgGYRqCwLyrEoAwcYBo+qUY2KyChFQSIK9kAKi6E' +
-                    '6AGnYHMCUg3BAA+gYCoAkwwH8tAMFiABEFPwgSGyIYpUsBQVWTCoCf+iQAF44RRr+oKkELgvA6EQgQ+aQAW2CEYGUCqLBIrhlly0L3580MQIiLOCELDRLraxVBr76II2UuGNAhTVq8yABeJ0wk5StAJxVEOGLMQi' +
-                    'g4CJ4BHaZ4ZifeEtIABDJK+gARAMIgvBIQudSllJVGKShYPoS2WC4yssUCAUayAlvnDFALtcwi1P0kNqPPGIf6zPXc1iAQJ0GUpe+jIva8pgM9PwTGCGgVxiCGW3rPEqFKTLFbKxBLS0Q7/bZEsDE9CErwiQzkNW' +
-                    'JgBNwAC4xkmdcoqGDXWCDDlxaU42GAo2BywXIS4BAu34YhfL3MIy61APbdUjL5jI1j/chwoQyGb/E19IDwggttCBOvSXmFDoPzyKDNOcAgzfiOdDTyYyA0DDFCBjRjGISQJrnOIKjNxMJwjq0lm4NBTVgWklZGoG' +
-                    'oclCEy6dKVFpetSbngIUDKXOZZwhs24841+suE4ooOHNZEjHZMnQlxxMcTTnWIM5WL1FVrmqsLD+Q61bpc51TMHVoplnGdcQmX2ucLWlzUKm73kYUHrWnre+AxPaIOzE/uHXl1nnZiYjD88Aq55QaCNpDrOqRPrh' +
-                    'tnPEAwCXmNDaypEcro12HysrB2L1cdbLIk1mL31aaN3WDvVEg7aJbcY/zHaOzFmDaV4DhzX8AZ5wLEhte+1ZO3YSj/nYIrVA/xnuM0Ia3Ae940EWgsdBrnFcfygkbFKjCDcmdLbMbWU/wQXQdxcEFPXqY2x77Yhy' +
-                    'mHK1y0qNQimaEN5cR6AAEa4i5iXbiPx7lI0V7hkmQrBA+rvfyy5PQVGRHoJSMru7Ne8oMqoITxD0YAwTKHrA8xBTdLcTHf2OSD66z/NgZGLhnc5FjgPdSGo0pNHBpHrC07Dk6pY8qGC4xtFLCOWEouMXLQUisYtR' +
-                    'VPgmo6yo+McigbHi8ttkwx05c1QxUH1Cx7clB294NznK9aDiZeL5xMzZA7PohOzkHWPYzMPjEO5gt7rELe5DxqPxhkYnZyQnWHU+sZ5QwvwhGNfII9mj8FOX+UNnQvNZRfwx8p07F+Q65+12EV705ITEks1xOimR' +
-                    'E12G8GwiPU8oSD/ysZ3nhmofla7Vps4J74b0O9ZF2XU5+duqbcwjW8/OyYP+9Z5BLI0IAAA7' +
-                    '" />';
-
-var isNew = 8;     // a "new" comment is less than 8 hours ago
-var isOld = 24;     // an "old" comment is more than 48 hours (values are NOT the official defaults; just set her temporarily)
-var bShowThreads = 1; // default: do show threads
-var bRecentLast = 1; // default: show in oldest-to-recent order
-var bEnableOrder= 1; // default: do reorder comments
-var bHideOld = 1;   // default: do hide old comments
-var bColorAge = 1;    // default: do color comments by age
-var bReorgRcntCmt = 1; // default: reorganize recent comments widget
-
-//
 // INIT
 //
 
-if (!initialized) {
-  var settingsOpen = false;
-  if (GM_getValue('version') != SCRIPT.version ||
-      GM_getValue('build') != SCRIPT.build) {
-    handleVersionChange();
-  }
+var settingsOpen = false;
 
-// Check for missing settings.
-  if (GM_getValue('isOld') == undefined) {
-    saveDefaultSettings();
-  }
-  refreshSettings();
+var isNew = GM_getValue('isNew',8);
+var isOld = GM_getValue('isOld',24);
+var bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
+var bColorAge = GM_getValue('bColorAge','checked');
+var bHideOld = GM_getValue('bHideOld','checked');
+var bShowThreads = GM_getValue('bShowThreads','checked');
+var bRecentLast = GM_getValue('bRecentLast','checked');
+var bEnableOrder = GM_getValue('bEnableOrder','checked');
 
-  var initialized = true;
-  DEBUG('Completed initialize.');
-} else {
-  alert('ALREADY INIT -- tell MrPete!');
-}
+DEBUG('Completed initialize.');
 
 customizeMasthead();
 
-
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-// MISC FIXUPS ON ***ALL*** PAGES
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
 //
@@ -236,11 +199,7 @@ if (bReorgRcntCmt) {
 
 
 /////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-// AFTER THIS: functions ONLY on comment pages
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
+// functions on comment pages
 /////////////////////////////////////////////////////////////////
 
 
@@ -398,10 +357,11 @@ function AgeComment(elm) {
   }
 
 function FixComment(i) {
-  setReplyLink(this); // only need to do this one time
-  if (bHideOld || bColorAge) AgeComment(this);
+  if (!empty(this.id)) {
+    setReplyLink(this) // only need to do this one time
+    if (bHideOld || bColorAge) AgeComment(this)
+  }
 }
-
 
 function setupComments() {
   console.log(cmtForm.listElm)
@@ -459,13 +419,13 @@ function customizeMasthead() {
   if (!$j(cmtForm.topDiv).length) return;
 
   // Make a container for the ca-assist menu.
-  var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
+  var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ') LOCAL';
 
   $j(cmtForm.topDiv).append(
     '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
     '<span id="wpa_settings">'+wpaTitle+'</span></div>');
 
-  $j('span#wpa_settings').click(toggleSettingsBox);
+  $j('span#wpa_settings').click(toggleSettings);
 
 }
 
@@ -476,24 +436,20 @@ function customizeMasthead() {
 // ********************************************************************
 
 
+function pad0(int, length) {
+  return ("000" + int).slice(-length)
+}
+
+function logDate() {
+  var now = new Date()
+  return pad0(now.getHours(), 2) + ':' + 
+    pad0(now.getMinutes(), 2) + ':' + 
+    pad0(now.getSeconds(), 2) + ':' + 
+    pad0(now.getMilliseconds(), 3)
+}
+
 function DEBUG(line) {
-  if(debug) console.log(line)
-}
-
-function showIfUnchecked(setting) {
-  if (setting == '0') {
-    setting = 'unchecked';
-  }
-  return setting;
-}
-
-function showIfSelected(setting) {
-  if (setting == '0') {
-    setting = 'not selected';
-  } else {
-    setting = 'selected';
-  }
-  return setting;
+  dump(logDate() + ' ' + line +'\n')
 }
 
 function stripURI(img) {
@@ -508,30 +464,20 @@ function stripURI(img) {
 // ********************************************************************
 // ********************************************************************
 
-function toggleSettingsBox() {
-  if (settingsOpen === false) {
-    settingsOpen = true;
-    createSettingsBox();
-    showSettingsBox();
-  } else {
-    settingsOpen = false;
-    destroySettingsBox();
-
-  }
+function toggleSettings() {
+  settingsOpen ? closeSettings() : showSettings()
 }
 
-function showSettingsBox() {
-  var settingsBoxContainer = document.getElementById('wpa_settingsBox');
-  if (settingsBoxContainer) {
-    settingsBoxContainer.style.display = 'block';
-  }
+function showSettings() {
+  createSettingsBox()
+  document.getElementById('wpa_settingsBox').style.display = 'block'
+  settingsOpen = true
 }
 
-function destroySettingsBox() {
-  var settingsBoxContainer = document.getElementById('wpa_settingsBox');
-  if (settingsBoxContainer) {
-    settingsBoxContainer.parentNode.removeChild(settingsBoxContainer);
-  }
+function closeSettings() {
+  var settingsBoxContainer = document.getElementById('wpa_settingsBox')
+  settingsBoxContainer.parentNode.removeChild(settingsBoxContainer)
+  settingsOpen = false
 }
 
 function createSettingsBox() {
@@ -575,26 +521,35 @@ function createSettingsBox() {
   elt = makeElement('div', elt, {'class':'pop_content popcontent_advanced', 'id':'pop_content'});
   var settingsBox = makeElement('div', elt, {'style':'position: fixed; top: 10px; right: 10px; width: 400px; height: 400px; font-size: 14px; z-index: 100; color: #BCD2EA; background: black; text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;', 'id':'settingsBox'});
 
-  // Create General tab.
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
 
-  // Create Save button
-  var saveButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 10px; bottom: 10px;'});
-  makeElement('button', saveButton).appendChild(document.createTextNode('Save Settings'));
-  saveButton.addEventListener('click', saveSettings, false);
-
-  // Create Help button
-  var helpButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'left: 160px; bottom: 10px;'});
-  makeElement('button', helpButton).appendChild(document.createTextNode('Help'));
-  helpButton.addEventListener('click', helpSettings, false);
-
-  // Create Update button
-  var updateButton = makeElement('span', settingsBox, {'class':'fancy_button', 'style':'right: 10px; bottom: 10px;'});
-  makeElement('button', updateButton).appendChild(document.createTextNode('Check for Updates'));
-  updateButton.addEventListener('click', updateScript, false);
-
+  makeButton(settingsBox, 'left: 10px', 'Show', saveSettings)
+  makeButton(settingsBox, 'left: 95px', 'Cancel', closeSettings)
+  makeButton(settingsBox, 'left: 190px', 'Help', helpSettings)
+  makeButton(settingsBox, 'right: 10px', 'Check Update', updateScript)
+  
   DEBUG('Menu created.');
+}
+
+function makeButton(settingsBox, position, name, action) {
+  var button = makeElement('span', settingsBox, {'class':'fancy_button', 'style':position+'; bottom: 10px;'})
+  makeElement('button', button).appendChild(document.createTextNode(name))
+  button.addEventListener('click', action, false)
+}
+
+function makeElement(type, appendto, attributes) {
+  var element = document.createElement(type)
+  if (attributes)
+    for (var i in attributes)
+      element.setAttribute(i, attributes[i])
+  if (appendto)
+    appendto.appendChild(element)
+  return element
+}
+
+function checked(bool) {
+  return bool ? ' checked="checked"' : ''
 }
 
 // Create General Tab
@@ -612,8 +567,7 @@ function createGeneralTab() {
 '   <label for="bReorgRcntCmt" title="Check this to reorganize the Recent Comments sidebar.">Commenter by thread:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+
-((GM_getValue("bReorgRcntCmt",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bReorgRcntCmt" type="checkbox" title="Check this to reorganize the Recent Comments sidebar." style="vertical-align: middle;" value="checked"'+checked(bReorgRcntCmt)+'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -628,9 +582,9 @@ function createGeneralTab() {
 '   <label for="isNew" title="Comment ages for coloring and hiding.">Define comment ages:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="isNew" type="text" value="'+GM_getValue('isNew', '24')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <input id="isNew" type="text" value="'+isNew+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
 '   <label for="bHideOld"> (new) to </label><br/>\n'+
-'   <input id="isOld" type="text" value="'+GM_getValue('isOld', '72')+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
+'   <input id="isOld" type="text" value="'+isOld+'" size="1" style="vertical-align: middle; text-align: center;"/>\n'+
 '   <label for="bHideOld"> (old) hours.</label>\n'+
 ' </div>\n'+
 '</div>\n'+
@@ -640,7 +594,7 @@ function createGeneralTab() {
 '   <label for="bColorAge" title="Check to color newer comments according to indicated time intervals.">Color new comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + ( (GM_getValue("bColorAge",'checked')=='checked') ? ' checked="checked"' : '') + '/>\n'+
+'   <input id="bColorAge" type="checkbox" title="Check to color newer comments according to indicated time intervals." style="vertical-align: middle;" value="checked"' + checked(bColorAge) + '/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -649,7 +603,7 @@ function createGeneralTab() {
 '   <label for="bHideOld" title="Check to hide older comments."> Hide old comments:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' +( (GM_getValue("bHideOld",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bHideOld" type="checkbox" title="Check to hide older comments." style="vertical-align: middle;" value="checked"' + checked(bHideOld) +'/>\n'+
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n'+
@@ -666,7 +620,7 @@ var sThreadDisplay = ''+
 '   <label for="bEnableOrder" title="Check to enable comment reordering">Enable reordering:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' +( (GM_getValue("bEnableOrder",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bEnableOrder" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' + checked(bEnableOrder) +'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -674,7 +628,7 @@ var sThreadDisplay = ''+
 '   <label for="bShowThreads" title="Use threaded display for comments (if site supports it)"> Threaded display:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' +( (GM_getValue("bShowThreads",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bShowThreads" type="checkbox" style="vertical-align: middle;" value="checked"' + checked(bShowThreads) +'/>\n'+
 '   <label title="Use threaded display for comments (if site supports it)"> (if site supports it)</label>\n'+
 ' </div>\n'+
 '</div>\n'+
@@ -684,7 +638,7 @@ var sThreadDisplay = ''+
 '   <label for="bRecentLast" title="Check to show most-recent comments at the end">Newest at end:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
-'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' +( (GM_getValue("bRecentLast",'checked')=='checked') ? ' checked="checked"' : '')+'/>\n'+
+'   <input id="bRecentLast" type="checkbox" style="vertical-align: middle;" title="Check to show most-recent comments at the end" value="checked"' + checked(bRecentLast) +'/>\n'+
 ' </div>\n'+
 '<br class="caaHide"/>\n'+
 '</div>\n'+
@@ -695,74 +649,189 @@ var sThreadDisplay = ''+
   return generalTab;
 }
 
-
-function handleVersionChange() {
-  GM_setValue('version', SCRIPT.version);
-  GM_setValue('build', SCRIPT.build);
-  // Check for invalid settings and upgrade them.
-}
-
-function saveDefaultSettings() {
-  // Assume all settings have been cleared and set defaults.
-  // For groups of radio buttons, one must be checked and all others cleared.
-  // For checkboxes, no need to default if the option should be off.
-
-  // General tab.
-
-  GM_setValue('isNew', '8');
-  GM_setValue('isOld', '24');
-  GM_setValue("bColorAge",'checked');
-  GM_setValue("bHideOld",'checked');
-  GM_setValue("bShowThreads",'checked');
-  GM_setValue("bRecentLast",'checked');
-  GM_setValue("bEnableOrder",'checked');
-  GM_setValue("bReorgRcntCmt",'checked');
-
-}
-
 function helpSettings() {
   window.open('http://climateaudit.org/ca-assistant/');
 }
 
 function saveSettings() {
 
-  bColorAge      = (document.getElementById('bColorAge').checked === true);
-  bHideOld      = (document.getElementById('bHideOld').checked === true);
-  bShowThreads      = (document.getElementById('bShowThreads').checked === true);
-  bRecentLast  = (document.getElementById('bRecentLast').checked === true);
-  bEnableOrder  = (document.getElementById('bEnableOrder').checked === true);
-  bReorgRcntCmt = (document.getElementById('bReorgRcntCmt').checked === true);
-  isNew      = document.getElementById('isNew').value;
-  isOld      = document.getElementById('isOld').value;
+  isNew = $j('#isNew')[0].value
+  isOld = $j('#isOld')[0].value
+  bColorAge = $j('#bColorAge')[0].checked
+  bHideOld = $j('#bHideOld')[0].checked
+  bShowThreads = $j('#bShowThreads')[0].checked
+  bRecentLast = $j('#bRecentLast')[0].checked
+  bEnableOrder = $j('#bEnableOrder')[0].checked
+  bReorgRcntCmt = $j('#bReorgRcntCmt')[0].checked
 
-  GM_setValue ('isNew', isNew);
-  GM_setValue ('isOld', isOld);
-  saveCheckBoxElementArray(['bColorAge','bHideOld','bShowThreads','bRecentLast','bEnableOrder','bReorgRcntCmt']);
+  GM_setValue('isNew', isNew)
+  GM_setValue('isOld', isOld)
+  GM_setValue('bColorAge', bColorAge)
+  GM_setValue('bHideOld', bHideOld)
+  GM_setValue('bShowThreads', bShowThreads)
+  GM_setValue('bRecentLast', bRecentLast)
+  GM_setValue('bEnableOrder', bEnableOrder)
+  GM_setValue('bReorgRcntCmt', bReorgRcntCmt)
 
-  toggleSettingsBox();
+  closeSettings()
+  
+  location.reload()
 }
 
-function refreshSettings() {
-  bColorAge    = GM_getValue('bColorAge','checked');
-  bHideOld     = GM_getValue('bHideOld','checked');
-  bShowThreads = GM_getValue('bShowThreads','checked');
-  bRecentLast  = GM_getValue('bRecentLast','checked');
-  bEnableOrder  = GM_getValue('bEnableOrder','checked');
-  bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
-  isNew      = GM_getValue('isNew',8);
-  isOld      = GM_getValue('isOld',48);
-}
+$j(document).ready(function() {
+
+		var show_text = 'Preview';
+		var hide_text = 'Hide preview';
+		var textarea = $j('textarea[name="comment"]');
+		if (!textarea) {
+			alert('Not a comment page');
+			return;
+		}
+		
+		var textarea_id = '#' + $j(textarea).attr('id');
+		var comment = '';
+
+	$j(textarea_id).wrap('<div id="ca-cmt-wrap"></div>');
+	$j(textarea_id).before('<div id="ca-cmt-preview"></div>');
+	$j('#ca-cmt-preview').prepend('<div id="preview-tab"><div><a>'+ show_text +'</a></div></div>');
+
+	$j('#preview-tab div').toggle(
+			function() {
+			comment = $j(textarea_id).val();
+			if ($j(textarea_id).val() != '') comment = comment + '\n\n';
+				comment_preview = comment.replace(/(<\/?)script/g,'$1noscript')
+				.replace(/(<blockquote[^>]*>)/g, '\n$1')
+				.replace(/(<\/blockquote[^>]*>)/g, '$1\n')
+				.replace(/\r\n/g, '\n')
+				.replace(/\r/g, '\n')
+				.replace(/\n\n+/g, '\n\n')
+				.replace(/\n?(.+?)(?:\n\s*\n)/g, '<p>$1</p>')
+				.replace(/<p>\s*?<\/p>/g, '')
+				.replace(/<p>\s*(<\/?blockquote[^>]*>)\s*<\/p>/g, '$1')
+				.replace(/<p><blockquote([^>]*)>/ig, '<blockquote$1><p>')
+				.replace(/<\/blockquote><\/p>/ig, '</p></blockquote>')
+				.replace(/<p>\s*<blockquote([^>]*)>/ig, '<blockquote$1>')
+				.replace(/<\/blockquote>\s*<\/p>/ig, '</blockquote>')
+				.replace(/\s*\n\s*/g, '<br />');
+
+				var preview_html = '<ol id="cmt-preview"><li>'+ comment_preview +'</li></ol>';
+
+			$j(textarea).after('<div id="textarea_clone"></div>');
+			$j(textarea).clone().appendTo($j('#textarea_clone'));
+			$j('#textarea_clone textarea').text(comment);
+			$j('#textarea_clone').hide();
+			$j(textarea).replaceWith('<div id="comment_preview"></div>');
+			$j('#comment_preview').html(preview_html);
+			$j('#preview-tab a').text(hide_text);
+			$j('#html-editor button').hide();
+			},
+			function() {
+			$j('#textarea_clone').remove();
+			$j('#comment_preview').replaceWith(textarea);
+			$j(textarea_id).text(comment);
+			$j('#preview-tab a').text(show_text);
+			$j('#html-editor button').show();
+			}
+		)
+
+
+		var html_editor = '<div id="html-editor"><button style="display: block;" id="ed_strong" title="Bold">strong</button><button style="display: block;" id="ed_em" title="Italic">em</button><button style="display: block;" id="ed_link" title="Link">a[href=""]</button><button style="display: block;" id="ed_blockquote" title="Insert Quote">blockquote</button><button style="display: block;" title="Superscript" id="ed_sup">sup</button><button style="display: block;" title="Subscript" id="ed_sub">sub</button><button style="display: block;" title="Less-Than symbol" id="ed_lt">lt</button><button style="display: block;" title="Strikeout" id="ed_del">del</button><button style="display: block;" title="Underscore" id="ed_under">under</button><button style="display: block;" id="ed_code" title="Source Code">code</button><button style="display: block;" title="LaTeX code" id="ed_latex">latex</button><button style="display: block;" title="Insert Image"  id="ed_img">img[src=""]</button></div>';
+
+	$j('#ca-cmt-preview').prepend(html_editor);
+	
+	function setSelect(element,iStart, iLength) {
+    if (element.createTextRange) {
+        var oRange = element.createTextRange();
+        oRange.moveStart("character", iStart);
+        oRange.moveEnd("character", iLength - element.value.length);
+        oRange.select();
+    } else if (element.setSelectionRange) {
+        element.setSelectionRange(iStart, iStart+iLength);
+    }
+};
+
+		function insert(start, end, core) {
+			element = document.getElementById('comment');
+			if (document.selection) {
+				element.focus();
+				sel = document.selection.createRange();
+				sel.text = start + sel.text + end;
+			} else if (element.selectionStart || element.selectionStart == '0') {
+				element.focus();
+				var startPos = element.selectionStart;
+				var endPos = element.selectionEnd;
+				if (startPos == endPos) {
+					element.value = element.value.substring(0, startPos) + start + core + end + element.value.substring(endPos, element.value.length);
+					setSelect(element,startPos+start.length,core.length)
+				} else {
+					element.value = element.value.substring(0, startPos) + start + element.value.substring(startPos, endPos) + end + element.value.substring(endPos, element.value.length);
+			}
+			} else {
+				element.value += start + core + end;
+				setSelect(element,start.length,core.length)
+				
+			}
+		}
+		
+	$j('#html-editor button').click(function() {
+		var button_id = attribs = $j(this).text();
+		button_id = button_id.replace(/\[.*\]/, '');
+		if (/\[.*\]/.test(attribs)) { attribs = attribs.replace(/.*\[(.*)\]/, ' $1'); } else attribs = '';
+		var start = '';
+		var end = '';
+		var core='';
+		switch (button_id) {
+		case 'lt':
+			start = '&lt;';break;
+		case 'img':
+			var URL = prompt('Enter the URL of the image', 'http://');
+			if (URL) {
+				start = '<img src="' 
+					+ URL 
+					+ '" alt="' + prompt('Enter a description of the image', '') 
+					+ '" width="' + prompt('Enter image width (e.g. 400) or leave blank for natural size', '') 
+					+ '" />';
+			} else {
+				start = '<img src="';end='" alt="" width="" />';
+				core='URL_here_with_NO_spaces_at_all...Just_paste_over_this_message!';
+			}
+			break;
+		case 'latex':
+			start = '$latex ';end=' $';
+			core='LaTeX here. Leave blank at both ends!';break;
+		case 'code':
+			start = '[sourcecode]';
+			end   = '[/sourcecode]';break;
+		case 'a': 
+			var URL = prompt('Enter the URL' ,'http://');
+			if (URL) {
+				start = '<a href="' + URL + '">';
+				core='LinkText Here';
+				end="</a>";
+			} else {
+				start = '<a href="';end='">LinkText Here</a>';
+				core='URL_here_with_NO_spaces_at_all...Just_paste_over_this_message!';
+			}
+			break;
+		default:
+			start = '<'+button_id+attribs+'>';
+			end = '</'+button_id+'>';
+		}
+		insert(start, end, core);
+		return false;
+	})
+
+}) 
 
 //update the script (by Richard Gibson; changed by ms99 and blannie)
 function updateScript() {
   try {
-    if (!GM_getValue) {
-      return; // Only do this inside GM
-    }
+    console.log('try')
     GM_xmlhttpRequest({
       method: 'GET',
       url: SCRIPT.url + '?source', // don't increase the 'installed' count; just for checking
       onload: function(result) {
+        console.log('onload')
         if (result.status != 200) {
           return;
         }
@@ -772,14 +841,12 @@ function updateScript() {
         var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : '';
         if (theOtherBuild < runningBuild) {
           if (window.confirm('You have a beta version (build ' + runningBuild + ') installed.\n\nDo you want to DOWNGRADE to the most recent official release (version ' + theOtherVersion + ')?\n')) {
-            //clearSettings();
             window.location.href = SCRIPT.url;
           }
           return;
         } else if (theOtherBuild > runningBuild ||
                    theOtherVersion != SCRIPT.version) {
           if (window.confirm('Version ' + theOtherVersion + ' is available!\n\n' + 'Do you want to upgrade?' + '\n')) {
-            //clearSettings();
             window.location.href = SCRIPT.url;
           }
         } else {
@@ -789,76 +856,6 @@ function updateScript() {
       }
     });
   } catch (ex) {
-  }
-}
-
-
-
-function makeElement(type, appendto, attributes, checked, chkdefault) {
-  var element = document.createElement(type);
-  if (attributes != null) {
-    for (var i in attributes) {
-      element.setAttribute(i, attributes[i]);
-    }
-  }
-  if (checked != null) {
-    if (GM_getValue(checked, chkdefault) == 'checked') {
-      element.setAttribute('checked', 'checked');
-    }
-  }
-  if (appendto) {
-    appendto.appendChild(element);
-  }
-  return element;
-}
-
-
-// Toggle checkbox element and return true if it is checked
-function toggleCheckElt(eltId) {
-  if (isChecked(eltId)) {
-    GM_setValue(eltId, '0');
-    return false;
-  } else {
-    GM_setValue(eltId, 'checked');
-    return true;
-  }
-}
-
-// Save an array of checkbox elements
-function saveCheckBoxElementArray(arrayEltIds) {
-  for (var i=0; i<arrayEltIds.length; i++)
-    saveCheckBoxElement(arrayEltIds[i])
-}
-
-// Save checkbox element and return true if it is checked
-function saveCheckBoxElement(eltId) {
-  if (document.getElementById(eltId).checked === true) {
-    GM_setValue(eltId, 'checked');
-    return true;
-  } else {
-    GM_setValue(eltId, 0);
-    return false;
-  }
-}
-
-// Check if a GM value is the same as the passed value
-function isSame (gmName, gmValue) {
-  return GM_getValue(gmName) == gmValue;
-}
-
-// Check if a GM value is checked or not
-function isChecked (gmName) {
-  return isSame (gmName, 'checked');
-}
-
-function clearSettings() {
-  if (typeof GM_listValues == 'function' &&
-      typeof GM_deleteValue == 'function') {
-    var values = GM_listValues();
-    for (var i in values) {
-      GM_deleteValue(values[i]);
-    }
-  } else {
-    alert('In order to do this you need at least GreaseMonkey version: 0.8.20090123.1. Please upgrade and try again.');
+    console.log(ex)
   }
 }
