@@ -51,13 +51,9 @@
 // @require     ca-assist-comment.js
 // ==/UserScript==
 
-var $j = jQuery.noConflict();
-
 console.log('hostname: '+location.hostname)
 
-if (window.top != window.self) {  //don't run on frames or iframes
-  return;
-}
+if (window.top != window.self) return //don't run on frames or iframes
 
 String.prototype.trim = function() {
   return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
