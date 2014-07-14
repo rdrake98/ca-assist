@@ -39,7 +39,7 @@
 // @namespace   ca-assist
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @description Enhances user experience on climate blogs courtesy of Climate Audit
+// @description Enhances user experience on climate blogs courtesy of Climate Audit and Mr Pete
 // @copyright   2009+, MrPete (http://www.ClimateAudit.org) and friends All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
