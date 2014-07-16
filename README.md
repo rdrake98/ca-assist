@@ -1,4 +1,4 @@
-ca-assist
-=========
+Assist+
+=======
 
-Enhances user experience on Open Science Web Ring courtesy of Climate Audit
+Enhanced user experience on climate blogs courtesy of Climate Audit and MrPete
