@@ -37,24 +37,29 @@
 // ==UserScript==
 // @name        Assist+
 // @namespace   ca-assist
-// @grant       GM_getValue
-// @grant       GM_setValue
-// @grant       GM_getResourceText
-// @grant       GM_xmlhttpRequest
-// @description Enhances user experience on climate blogs courtesy of Climate Audit and MrPete
+// @description Enhanced user experience on climate blogs courtesy of Climate Audit and MrPete
+// @version     0.1
 // @copyright   2009+, MrPete, Richard Drake and friends. All right reserved
 // @license     GPL version 3 or any later version; http://www.gnu.org/copyleft/gpl.html
 // @include     http://climateaudit.org/*
 // @include     http://judithcurry.com/*
 // @include     http://dev.whiteword.com/assist/*
-// @version     0.1
 // @require     jquery.min.js
+// @require     moment.min.js
 // @require     images.js
 // @resource    styles styles.css
+// @grant       GM_getValue
+// @grant       GM_setValue
+// @grant       GM_getResourceText
+// @grant       GM_xmlhttpRequest
 // ==/UserScript==
 
+console.log('hostname: ' + location.hostname)
+
+if (window.top != window.self) return //don't run on frames or iframes
+
 var SCRIPT = { // URL of script for updates
-  url: 'https://github.com/rdrake98/ca-assist/raw/master/assist.user.js',
+  url: 'https://github.com/rdrake98/ca-assist/raw/dev/assist.user.js',
   version: '0.1',
   build: '44',
 }
@@ -62,10 +67,6 @@ var SCRIPT = { // URL of script for updates
 var $j = jQuery.noConflict()
 
 $j('head').append("<style>\n" + GM_getResourceText('styles') + "\n</style>") 
-
-console.log('hostname: ' + location.hostname)
-
-if (window.top != window.self) return //don't run on frames or iframes
 
 String.prototype.trim = function() {
   return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
@@ -140,15 +141,12 @@ var isNew = GM_getValue('isNew',8);
 var isOld = GM_getValue('isOld',24);
 var bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
 var bColorAge = GM_getValue('bColorAge','checked');
-var bHideOld = GM_getValue('bHideOld','checked');
-var bShowThreads = GM_getValue('bShowThreads','checked');
-var bRecentLast = GM_getValue('bRecentLast','checked');
-var bEnableOrder = GM_getValue('bEnableOrder','checked');
+var bHideOld = GM_getValue('bHideOld',0);
+var bShowThreads = GM_getValue('bShowThreads',0);
+var bRecentLast = GM_getValue('bRecentLast',0);
+var bEnableOrder = GM_getValue('bEnableOrder',0);
 
 DEBUG('Completed initialize.');
-
-customizeMasthead();
-
 
 /////////////////////////////////////////////////////////////////
 //
@@ -218,6 +216,23 @@ DEBUG('Define main comment page functions');
 var cmtDates = new Array();
 var cmtCurDate = new Date;
 var cmtOldAge, cmtNewAge;
+
+customizeMasthead();
+
+function customizeMasthead() {
+
+  var wpaTitle = 'Assist+ ' + SCRIPT.version + 
+    ' build ' + SCRIPT.build + 
+    ' for ' + siteType +
+    ' ' + moment(cmtCurDate).fromNow()
+
+  $j(cmtForm.topDiv).append(
+    '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
+    '<span id="wpa_settings">'+wpaTitle+'</span></div>')
+
+  $j('span#wpa_settings').click(toggleSettings)
+
+}
 
 function setAgeValues() {
   cmtOldAge = cmtCurDate.valueOf() - isOld*60*60*1000;
@@ -402,39 +417,9 @@ function setupComments() {
 
 setupComments();
 
-//
-// UTILITY FUNCTIONS
-//
-
-//
-// UI for CA-Assistant
-//
-
-function customizeMasthead() {
-
-  if ($j('#wpa_menu').length) return;
-
-  // Get the masthead.
-
-  if (!$j(cmtForm.topDiv).length) return;
-
-  // Make a container for the ca-assist menu.
-  var wpaTitle = 'CA-Assist ['+siteType+'] ' + SCRIPT.version + ' (Build ' + SCRIPT.build + ')';
-
-  $j(cmtForm.topDiv).append(
-    '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
-    '<span id="wpa_settings">'+wpaTitle+'</span></div>');
-
-  $j('span#wpa_settings').click(toggleSettings);
-
-}
-
 // ********************************************************************
+// DEBUG 
 // ********************************************************************
-// DEBUG AND LOG BOX
-// ********************************************************************
-// ********************************************************************
-
 
 function pad0(int, length) {
   return ("000" + int).slice(-length)
@@ -453,15 +438,12 @@ function DEBUG(line) {
 }
 
 function stripURI(img) {
-  img = img.split('"')[1];
-  return img.replace('" />', '');
+  img = img.split('"')[1]
+  return img.replace('" />', '')
 }
 
-
 // ********************************************************************
-// ********************************************************************
-// SETTINGS BOX
-// ********************************************************************
+// SETTINGS
 // ********************************************************************
 
 function toggleSettings() {
@@ -831,31 +813,31 @@ function updateScript() {
       method: 'GET',
       url: SCRIPT.url + '?source', // don't increase the 'installed' count; just for checking
       onload: function(result) {
-        console.log('onload')
-        if (result.status != 200) {
-          return;
-        }
-        if (!result.responseText.match(/build:\s+'(\d+)/)) return;
-        var theOtherBuild = parseInt(RegExp.$1);
-        var runningBuild = parseInt(SCRIPT.build);
-        var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : '';
-        if (theOtherBuild < runningBuild) {
-          if (window.confirm('You have a beta version (build ' + runningBuild + ') installed.\n\nDo you want to DOWNGRADE to the most recent official release (version ' + theOtherVersion + ')?\n')) {
-            window.location.href = SCRIPT.url;
-          }
-          return;
-        } else if (theOtherBuild > runningBuild ||
-                   theOtherVersion != SCRIPT.version) {
-          if (window.confirm('Version ' + theOtherVersion + ' is available!\n\n' + 'Do you want to upgrade?' + '\n')) {
-            window.location.href = SCRIPT.url;
-          }
-        } else {
-          alert('You already have the latest version.');
-          return;
-        }
+        if (result.status != 200)
+          return
+        if (!result.responseText.match(/build:\s+'(\d+)/)) return
+        var theOtherBuild = parseInt(RegExp.$1)
+        var runningBuild = parseInt(SCRIPT.build)
+        var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : ''
+        if (theOtherBuild < runningBuild)
+          if (window.confirm(
+            'You have a beta version (build ' + runningBuild + ') installed.\n\n' + 
+            'Do you want to DOWNGRADE to the most recent official release (version ' +
+            theOtherVersion + ')?'
+          ))
+            window.location.href = SCRIPT.url
+        else if (theOtherBuild > runningBuild || theOtherVersion != SCRIPT.version)
+          if (window.confirm(
+            'Version ' + theOtherVersion + ' is available!\n\n' + 
+            'Do you want to upgrade?'
+          ))
+            window.location.href = SCRIPT.url
+        else
+          alert('You already have the latest version.')
       }
     });
   } catch (ex) {
+    console.log('catch')
     console.log(ex)
   }
 }
