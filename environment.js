@@ -1,0 +1,1 @@
+var cmtCurDate = new Date

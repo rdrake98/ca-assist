@@ -46,11 +46,12 @@
 // @include     http://dev.whiteword.com/assist/*
 // @require     jquery.min.js
 // @require     moment.min.js
+// @require     environment.js
 // @require     images.js
 // @resource    styles styles.css
+// @grant       GM_getResourceText
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -213,9 +214,8 @@ $j(cmtForm.listID).attr('id','commentListOL');
 
 DEBUG('Define main comment page functions');
 
-var cmtDates = new Array();
-var cmtCurDate = new Date;
-var cmtOldAge, cmtNewAge;
+var cmtDates = []
+var cmtOldAge, cmtNewAge
 
 customizeMasthead();
 
@@ -284,13 +284,12 @@ function sortTreeIDdesc(a,b) {
      return getMaxTreeID(a) < getMaxTreeID(b) ? 1 : -1;
 }
 
-var sReplyTxt= cmtForm.bHasReply ? "Paste Link" : "Reply w/ Link";
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var sReplyTxt= cmtForm.bHasReply ? "Paste Link" : "Reply w/ Link"
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 //
 // ADD REPLY LINKS
 //
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function setReplyLink(elm) {
   var cmtURL='#'+elm.id;
