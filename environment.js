@@ -1,1 +1,9 @@
-var cmtCurDate = new Date
+var currentTime = new Date
+var bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked')
+var isNew = GM_getValue('isNew',8)
+var isOld = GM_getValue('isOld',24)
+var bColorAge = GM_getValue('bColorAge','checked')
+var bHideOld = GM_getValue('bHideOld',0)
+var bEnableOrder = GM_getValue('bEnableOrder',0)
+var bShowThreads = GM_getValue('bShowThreads',0)
+var bRecentLast = GM_getValue('bRecentLast',0)

@@ -59,8 +59,8 @@ console.log('hostname: ' + location.hostname)
 
 if (window.top != window.self) return //don't run on frames or iframes
 
-var SCRIPT = { // URL of script for updates
-  url: 'https://github.com/rdrake98/ca-assist/raw/dev/assist.user.js',
+var SCRIPT = { // no automatic updates
+  url: null,
   version: '0.1',
   build: '44',
 }
@@ -136,18 +136,9 @@ function getCmtDate(elm) {
 // INIT
 //
 
-var settingsOpen = false;
+var settingsOpen = false
 
-var isNew = GM_getValue('isNew',8);
-var isOld = GM_getValue('isOld',24);
-var bReorgRcntCmt = GM_getValue('bReorgRcntCmt','checked');
-var bColorAge = GM_getValue('bColorAge','checked');
-var bHideOld = GM_getValue('bHideOld',0);
-var bShowThreads = GM_getValue('bShowThreads',0);
-var bRecentLast = GM_getValue('bRecentLast',0);
-var bEnableOrder = GM_getValue('bEnableOrder',0);
-
-DEBUG('Completed initialize.');
+DEBUG('Completed initialize.')
 
 /////////////////////////////////////////////////////////////////
 //
@@ -224,7 +215,7 @@ function customizeMasthead() {
   var wpaTitle = 'Assist+ ' + SCRIPT.version + 
     ' build ' + SCRIPT.build + 
     ' for ' + siteType +
-    ' ' + moment(cmtCurDate).fromNow()
+    ' ' + moment(currentTime).fromNow()
 
   $j(cmtForm.topDiv).append(
     '<div id="wpa_menu" style="position: absolute; top: 30px; right: 25px; text-align: left; font-size: 11px; font-weight: bold; color: #FFD927">'+
@@ -235,8 +226,8 @@ function customizeMasthead() {
 }
 
 function setAgeValues() {
-  cmtOldAge = cmtCurDate.valueOf() - isOld*60*60*1000;
-  cmtNewAge = cmtCurDate.valueOf() - isNew*60*60*1000;
+  cmtOldAge = currentTime.valueOf() - isOld*60*60*1000;
+  cmtNewAge = currentTime.valueOf() - isNew*60*60*1000;
 }
 
 const AGE_OLD  = 0;
@@ -505,10 +496,10 @@ function createSettingsBox() {
   var generalTab = createGeneralTab();
   settingsBox.appendChild(generalTab);
 
-  makeButton(settingsBox, 'left: 10px', 'Show', saveSettings)
-  makeButton(settingsBox, 'left: 95px', 'Cancel', closeSettings)
-  makeButton(settingsBox, 'left: 190px', 'Help', helpSettings)
-  makeButton(settingsBox, 'right: 10px', 'Check Update', updateScript)
+  makeButton(settingsBox, 'left: 10px', 'Update Assist+', updateScript)
+  makeButton(settingsBox, 'left: 164px', 'Help', helpSettings)
+  makeButton(settingsBox, 'left: 241px', 'Cancel', closeSettings)
+  makeButton(settingsBox, 'right: 10px', 'Show', saveSettings)
   
   DEBUG('Menu created.');
 }
@@ -631,7 +622,11 @@ var sThreadDisplay = ''+
 }
 
 function helpSettings() {
-  window.open('http://climateaudit.org/ca-assistant/');
+  window.open('http://climateaudit.org/ca-assistant/')
+}
+
+function updateScript() {
+  window.open('https://github.com/rdrake98/ca-assist/raw/dev/assist.user.js')
 }
 
 function saveSettings() {
@@ -803,40 +798,3 @@ $j(document).ready(function() {
 	})
 
 }) 
-
-//update the script (by Richard Gibson; changed by ms99 and blannie)
-function updateScript() {
-  try {
-    console.log('try')
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url: SCRIPT.url + '?source', // don't increase the 'installed' count; just for checking
-      onload: function(result) {
-        if (result.status != 200)
-          return
-        if (!result.responseText.match(/build:\s+'(\d+)/)) return
-        var theOtherBuild = parseInt(RegExp.$1)
-        var runningBuild = parseInt(SCRIPT.build)
-        var theOtherVersion = result.responseText.match(/@version\s+([\d.]+)/)? RegExp.$1 : ''
-        if (theOtherBuild < runningBuild)
-          if (window.confirm(
-            'You have a beta version (build ' + runningBuild + ') installed.\n\n' + 
-            'Do you want to DOWNGRADE to the most recent official release (version ' +
-            theOtherVersion + ')?'
-          ))
-            window.location.href = SCRIPT.url
-        else if (theOtherBuild > runningBuild || theOtherVersion != SCRIPT.version)
-          if (window.confirm(
-            'Version ' + theOtherVersion + ' is available!\n\n' + 
-            'Do you want to upgrade?'
-          ))
-            window.location.href = SCRIPT.url
-        else
-          alert('You already have the latest version.')
-      }
-    });
-  } catch (ex) {
-    console.log('catch')
-    console.log(ex)
-  }
-}
