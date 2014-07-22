@@ -54,12 +54,11 @@
 // @grant       GM_getResourceText
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @grant       GM_xmlhttpRequest
 // ==/UserScript==
 
-LOG('hostname: ' + location.hostname)
-
 if (window.top != window.self) return //don't run on frames or iframes
+
+LOG('hostname: ' + location.hostname)
 
 var SCRIPT = { // no automatic updates
   url: null,
@@ -147,11 +146,11 @@ var cmtFormDiffs = {
   },
   WUWT: {
     flat: true,
-    listSelector: 'dl.commentlist',
-    listElm: '#commentListOL > div',
+    listSelector: '.commentlist',
+    listElm: '.highlander-comment',
     bSeqDate: 1,
     replyElm: 'span.commentmetadata',
-    dateText: 'span.commentmetadata',
+    dateText: '.commentmetadata',
     bHasReply: false,
   },
 }
@@ -272,15 +271,12 @@ function getCommentNumber(cmt) {
 }
 
 function setReplyLink(elm) {
-  var cmtURL='#'+elm.id
-  var dateString = getCommentDate(elm)
-
-  var commentDate = new Date(dateString)
-  commentDates[elm.id] = commentDate.valueOf()
+  var commentDate = new Date(getCommentDate(elm))
+  commentDates[elm.id] = commentDate.valueOf(commentDate)
   var sReplyTxt= cmtForm.bHasReply ? "Paste Link" : "Reply w/ Link"
   $j(cmtForm.replyElm,elm).append(
     '<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+
-    sReplyTxt+'" href="'+cmtURL+'">'+sReplyTxt+'</a>'
+    sReplyTxt+'" href="#'+elm.id+'">'+sReplyTxt+'</a>'
   )
 }
 
