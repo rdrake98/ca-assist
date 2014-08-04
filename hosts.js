@@ -4,6 +4,7 @@ var siteTypes =
   CE: 'judithcurry.com',
   Lucia: 'rankexploits.com/musings',
   WUWT: 'wattsupwiththat.com',
+  RD: 'rdrake98.wordpress.com',
   Dev: 'dev.whiteword.com/assist',
 }
 var hostname = location.hostname
