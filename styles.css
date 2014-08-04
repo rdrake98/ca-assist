@@ -1,123 +1,146 @@
 #ca-cmt-wrap {
-	width: 100%;
+  width: 100%;
 }
 textarea#comment {
-	width: 98% !important;
-	}
-	
+  width: 98% !important;
+  }
+  
 #ca-cmt-preview {
-	position: relative;
-	overflow: hidden;
-	background: #EEE;
-	height: 22px;
-	padding: 3px;
-	border: solid #D6D3D3;
-	border-width: 1px 1px 0;
+  position: relative;
+  overflow: hidden;
+  background: #EEE;
+  height: 22px;
+  padding: 3px;
+  border: solid #D6D3D3;
+  border-width: 1px 1px 0;
 }
 div#comment_preview {
-	border: 1px solid #D6D3D3;
-	padding: 3px;
+  border: 1px solid #D6D3D3;
+  padding: 3px;
 }
 ol#cmt-preview {
-	margin: 0;
-	padding: 7px 5px 0;
-	list-style: none;
-	background: #FFF;
+  margin: 0;
+  padding: 7px 5px 0;
+  list-style: none;
+  background: #FFF;
 }
 #cmt-preview .cmt-author {
-	padding: 0 0 12px;
+  padding: 0 0 12px;
   line-height: 24px;
 }
 #cmt-preview p {
-	padding: 0;
-	margin: 0 0 18px;
+  padding: 0;
+  margin: 0 0 18px;
 }
 #preview-tab {
-	position: absolute;
-	top: 3px;
-	right: 3px;
+  position: absolute;
+  top: 3px;
+  right: 3px;
 }
 #preview-tab div {
-	float: right;
-	background: #FFF;
-	cursor: pointer;
-	font-size: 12px;
-	line-height: 1;
+  float: right;
+  background: #FFF;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
 }
 #preview-tab a {
-	float: left;
-	text-decoration: none;
-	padding: 4px 7px;
-	border: 1px solid #E4E4E4;
-	border-right: 1px solid #C9C9C9;
-	border-bottom: 1px solid #C9C9C9;
+  float: left;
+  text-decoration: none;
+  padding: 4px 7px;
+  border: 1px solid #E4E4E4;
+  border-right: 1px solid #C9C9C9;
+  border-bottom: 1px solid #C9C9C9;
 }
 #preview-tab a:hover {
-	background: #FEF8C7;
+  background: #FEF8C7;
 }
 #preview-tab a:active {
-	border: 1px solid #DDD;
-	border-right: 1px solid #E9E9E9;
-	border-bottom: 1px solid #E9E9E9;
+  border: 1px solid #DDD;
+  border-right: 1px solid #E9E9E9;
+  border-bottom: 1px solid #E9E9E9;
 }
 #textarea_clone {
-	height: 0;
-	overflow: hidden;
+  height: 0;
+  overflow: hidden;
 }
 
 #html-editor button {
-	float: left;
-	display: inline;
-	margin-right: 3px;
-	width: 22px;
-	height: 22px;
-	border: none;
-	cursor: pointer;
-	border: 1px solid #E4E4E4;
-	border-right: 1px solid #C9C9C9;
-	border-bottom: 1px solid #C9C9C9;
-	background-color: #FFF !important;
-	padding: 1px;
-	position: relative;
-	z-index: 100;
-	background: #FFF url(http://climateaudit.files.wordpress.com/2010/01/ca-sprite.gif) no-repeat;
-	font-size: 999px;
-	overflow: hidden;
+  float: left;
+  display: inline;
+  margin-right: 3px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  cursor: pointer;
+  border: 1px solid #E4E4E4;
+  border-right: 1px solid #C9C9C9;
+  border-bottom: 1px solid #C9C9C9;
+  background-color: #FFF !important;
+  padding: 1px;
+  position: relative;
+  z-index: 100;
+  background: #FFF url(http://climateaudit.files.wordpress.com/2010/01/ca-sprite.gif) no-repeat;
+  font-size: 999px;
+  overflow: hidden;
 }
 #html-editor button:hover {
-	background-color: #CACAFF !important;
+  background-color: #CACAFF !important;
 }
 #html-editor button:active {
-	border: 1px solid #DDD;
-	border-right: 1px solid #E9E9E9;
-	border-bottom: 1px solid #E9E9E9;
+  border: 1px solid #DDD;
+  border-right: 1px solid #E9E9E9;
+  border-bottom: 1px solid #E9E9E9;
 }
-button#ed_strong {background-position: 1px 1px}
-button#ed_em {background-position: 1px -17px}
-button#ed_under {background-position: 1px -35px}
-button#ed_del {background-position: 1px -53px}
-button#ed_sup {background-position: 1px -72px}
-button#ed_sub {background-position: 1px -89px}
-button#ed_img {background-position: 1px -107px}
-button#ed_link {background-position: 1px -125px}
-button#ed_blockquote {background-position: 1px -143px}
-button#ed_code {background-position: 1px -161px}
-button#ed_lt {background-position: 1px -179px}
-button#ed_latex {background-position: 1px -197px}
+button#ed_strong {background-position: 1px 1px;}
+button#ed_em {background-position: 1px -17px;}
+button#ed_under {background-position: 1px -35px;}
+button#ed_del {background-position: 1px -53px;}
+button#ed_sup {background-position: 1px -72px;}
+button#ed_sub {background-position: 1px -89px;}
+button#ed_img {background-position: 1px -107px;}
+button#ed_link {background-position: 1px -125px;}
+button#ed_blockquote {background-position: 1px -143px;}
+button#ed_code {background-position: 1px -161px;}
+button#ed_lt {background-position: 1px -179px;}
+button#ed_latex {background-position: 1px -197px;}
 
 /* Header */
-#wpa_menu span:hover{text-decoration:underline}
-#wpa_menu span{font-size: 12px; font-weight: bold; cursor: pointer; color: #FFD927}
-.wpa_optgroup1 {background-color: #FFFF77; text-align: center; color: #000000; font-weight: bold; font-size: 11px}
-.wpa_optgroup2 {background-color: #996633; text-align: center; color: #FFFFFF; font-size: 10px}
-.wpa_option    {font-size: 10px; cursor: default;}
-.wpa_option:hover {background-color:#660000;}
+#wpa_menu {position: absolute; top: 30px; right: 55px; text-align: left;}
+#wpa_menu span{
+  font-size: 14px; font-family: Tahoma,Verdana,Arial,sans-serif;
+  font-weight: bold; cursor: pointer;
+}
+#wpa_menu span:hover{text-decoration:underline;}
 
-.cmtOld .comment-author, .cmtOld cite { color: #777; background-color: #ccc; }
-.cmtNorm .comment-author, .cmtNorm cite { background-color: #ffc; }
-.cmtNew .comment-author, .cmtNew cite { background-color: #bfb; }
-
+/* .comment-author for CE, .commenticon for Lucia, .commentmetadata for WUWT */
+.cmtOld .comment-author, .cmtOld cite, .cmtOld .commentmetadata, .cmtOld .commenticon {color: #777; background-color: #ccc;}
+.cmtNorm .comment-author, .cmtNorm cite, .cmtNorm .commentmetadata, .cmtNorm .commenticon {background-color: #ffc;}
+.cmtNew .comment-author, .cmtNew cite, .cmtNew .commentmetadata, .cmtNew .commenticon {background-color: #bfb;}
 .cmtHidden { display: none; }
 
-h4.recentCommentsPostTitle { margin-bottom: 0;margin-top: 10px; padding-bottom: 0;padding-top:0; }
+h4.recentCommentsPostTitle { margin-bottom: 0;margin-top: 10px; padding-bottom: 0; padding-top: 0; }
 h4.recentCommentsPostTitle ul { margin:0;padding:0; }
+
+#wpa_settingsBox {top: 30px; width: 340px;}
+#settingsBox {background-color: #003; position: fixed; top: 20px; right: 10px; 
+  width: 340px; height: 224px; font-size: 14px; z-index: 100; color: #BCD2EA; 
+  text-align: left; padding: 5px; border: 1px solid; border-color: #FFFFFF;}
+#settingsBox .fancy_button{
+  position:absolute;border:1px solid #FFD927;color:#FFD927;cursor:pointer;
+  display:block;float:left;font-size:14px;font-weight:700;padding:5px;
+  text-decoration:none;width:auto;}
+#settingsBox .fancy_button button{
+  background:transparent;border:medium none #FFF;color:#FFD927;cursor:pointer;
+  font-size:14px;font-weight:700;margin:0;}
+#settingsBox .fancy_button button:hover{color:#BCD2EA;font-weight:700;text-decoration:none;}
+#settingsBox div {position:absolute;}
+#settingsBox #generalTab div {position: static;}
+#settingsBox label {color:#BCD2EA;font-family:"Open Sans",sans-serif;font-size:13px;font-weight:400;}
+#settingsBox span {position: static; vertical-align: middle;}
+#settingsBox input[type=checkbox] {vertical-align: middle;}
+#settingsBox input {position: static; margin: 0;}
+#settingsBox .lhs {
+  position: static; width: 50%; float: left; text-align: right; padding: 3px;}
+#settingsBox .rhs {position: static; float: left; padding: 3px;}
+#settingsBox .caaHide {clear: both; visibility: hidden;}
