@@ -39,14 +39,12 @@ $j('head').append("<style>\n" + GM_getResourceText('styles') + "\n</style>")
 
 var siteSpec = {
   flat: false,
-  hasReply: true, // there's a reply link on all comments not at maximum depth
   topDiv: '#header',
   commentList: '.commentlist',
   comment: '.highlander-comment:not(.pingback)',
   date: '.comment-meta:first',
   author: '.comment-author:first',
   replyParent: '.comment-meta:first', // element on which to attach Reply+
-  textarea: '#reply-title',
 }
 
 var siteSpecSpecifics = {
@@ -59,17 +57,14 @@ var siteSpecSpecifics = {
   },
   Lucia: {
     flat: true,
-    hasReply: false,
     topDiv: '#bodyinner',
     comment: 'div.comment',
     date: '.comment-date',
     author: '.comment-author',
     replyParent: '.commentmetadata',
-    textarea: '#commentform',
   },
   WUWT: {
     flat: true,
-    hasReply: false,
     date: '.commentmetadata',
     author: '.comment-author .fn',
     replyParent: '.commentmetadata',
@@ -187,45 +182,6 @@ function getCommentNumber(cmt) {
   return 0+id.split('-').slice(-1)
 }
 
-function setReplyLink(elm) {
-  var commentDate = new Date(getCommentDate(elm))
-  commentDates[elm.id] = commentDate.valueOf(commentDate)
-  var label = siteSpec.hasReply ? "Reply+" : "Reply"
-  var replyParent = $j(siteSpec.replyParent,elm)
-  replyParent.append(
-    '<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+
-    label+'" href="'+siteSpec.textarea+'">'+label+'</a>'
-  )
-}
-
-function firefoxSelection() {
-  return (window.getSelection() || '').toString().trim()
-}
-
-// operates on an object inside the comment of interest
-// the commentDates[] array is not available, it's in the GM script scope
-function pasteReplyLink() {
-  var elm = $j(this).parents(siteSpec.comment).first()
-  var author = $j(siteSpec.author,elm).first().text().trim()
-  console.log(author)
-  var dateString = getCommentDate(elm)
-  console.log(dateString)
-  var url='#'+elm[0].id
-  var now = moment(currentTime)
-  var date = moment(new Date(dateString))
-  format = now.diff(date, 'years') > 1 ? 'MMM D, YYYY ' : 'MMM D '
-  format = (now.diff(date, 'days') > 1 ? format : '') + 'h:mm '
-  // CA uses PM not pm
-  format += (siteType == 'CA' ? 'A' : 'a')
-  var text = author+' (<a href="'+url+'">'+date.format(format)+'</a>): '
-  var selection = firefoxSelection()
-  if (!empty(selection))
-    text += '\n<blockquote>' + selection + '</blockquote>\n'
-  var area = $j("#comment")[0]
-  area.value = text
-  area.scrollTop = area.scrollHeight
-}
-
 function ageComment(elm) {
   var age = getCommentAge(elm)
   var clas = ["cmtOld", "cmtNorm", "cmtNew"][age]
@@ -305,7 +261,7 @@ function createSettingsBox() {
   
   var flatten = $j('#flattenHierarchy')
   if (siteSpec.flat)
-    flatten.prop("disabled", true)
+    $j('#flattenHierarchyLine').hide()
   else {
     enableCheckboxesBasedOn(flatten[0])
     flatten.click(enableCheckboxes)
@@ -318,7 +274,7 @@ function enableCheckboxesBasedOn(flatten) {
 }
 
 function enableCheckboxes() {
-  enable_checkboxes_based_on(this)
+  enableCheckboxesBasedOn(this)
 }
 
 function makeButton(settingsBox, position, name, action) {
@@ -370,12 +326,14 @@ function createGeneralTab() {
 ' </div>\n'+
 '</div>\n'+
 '<br class="caaHide"/>\n' +
+'<div id="flattenHierarchyLine">\n'+
 ' <div class="lhs">\n'+
 '   <label for="flattenHierarchy" title="Check to enable comment reordering">Flatten hierarchy:</label>\n'+
 ' </div>\n'+
 ' <div class="rhs">\n'+
 '   <input id="flattenHierarchy" type="checkbox" style="vertical-align: middle;" title="Check to enable comment reordering" value="checked"' + checked(flattenHierarchy) +'/>\n'+
 ' </div>\n'+
+'</div>\n'+
 '<br class="caaHide"/>\n'+
 '<div>\n'+
 ' <div class="lhs">\n'+
@@ -424,21 +382,62 @@ function saveSettings() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Reply+
+////////////////////////////////////////////////////////////////////////////////
+
+function setReplyLink(elm) {
+  var commentDate = new Date(getCommentDate(elm))
+  commentDates[elm.id] = commentDate.valueOf(commentDate)
+  var label = siteSpec.flat ? "Reply" : "Reply+"
+  var replyParent = $j(siteSpec.replyParent,elm)
+  replyParent.append(
+    '<span class="meta-sep"> | </span><a class="comment-paste-link" title="'+
+    label+'" href="#respond">'+label+'</a>'
+  )
+}
+
+function firefoxSelection() {
+  return (window.getSelection() || '').toString().trim()
+}
+
+// operates on an object inside the comment of interest
+// the commentDates[] array is not available, it's in the GM script scope
+function pasteReplyLink() {
+  var elm = $j(this).parents(siteSpec.comment).first()
+  var author = $j(siteSpec.author,elm).first().text().trim()
+  console.log(author)
+  var dateString = getCommentDate(elm)
+  console.log(dateString)
+  var id = elm[0].id
+  var now = moment(currentTime)
+  var date = moment(new Date(dateString))
+  format = now.diff(date, 'years') > 1 ? 'MMM D, YYYY ' : 'MMM D '
+  format = (now.diff(date, 'days') > 1 ? format : '') + 'h:mm '
+  // CA uses PM not pm
+  format += (siteType == 'CA' ? 'A' : 'a')
+  var text = author+' (<a href="#'+id+'">'+date.format(format)+'</a>): '
+  var selection = firefoxSelection()
+  if (!empty(selection))
+    text += '\n<blockquote>' + selection + '</blockquote>\n'
+  var area = $j("#comment")[0]
+  area.value = text
+  area.scrollTop = area.scrollHeight
+  // if (!siteSpec.flat) $j('#comment_parent').val(id.split('-')[1])
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Comment form
 ////////////////////////////////////////////////////////////////////////////////
 
-var show_text = 'Preview'
-var hide_text = 'Hide preview'
 var textarea = $j('textarea[name="comment"]')
 if (empty(textarea)) return // redundant given earlier test on commentParent?
 var comment = ''
-
 textarea.wrap('<div id="ca-cmt-wrap"></div>')
 textarea.before('<div id="ca-cmt-preview"></div>')
 $j('#ca-cmt-preview').prepend('<div id="preview-tab"><div><a>'+ show_text +'</a></div></div>')
-var toggleState = true
+var previewShowing = false
 $j('#preview-tab div').click(function() {
-  if (toggleState) {
+  if (!previewShowing) {
     comment = textarea.val()
     if (comment != '') comment = comment + '\n\n'
     comment_preview = comment.replace(/(<\/?)script/g,'$1noscript')
@@ -455,25 +454,23 @@ $j('#preview-tab div').click(function() {
     .replace(/<p>\s*<blockquote([^>]*)>/ig, '<blockquote$1>')
     .replace(/<\/blockquote>\s*<\/p>/ig, '</blockquote>')
     .replace(/\s*\n\s*/g, '<br />')
-
     var preview_html = '<ol id="cmt-preview"><li>'+ comment_preview +'</li></ol>'
-
     textarea.after('<div id="textarea_clone"></div>')
     textarea.clone().appendTo($j('#textarea_clone'))
     $j('#textarea_clone textarea').text(comment)
     $j('#textarea_clone').hide()
     textarea.replaceWith('<div id="comment_preview"></div>')
     $j('#comment_preview').html(preview_html)
-    $j('#preview-tab a').text(hide_text)
+    $j('#preview-tab a').text('Edit')
     $j('#html-editor button').hide()
   } else {
     $j('#textarea_clone').remove()
     $j('#comment_preview').replaceWith(textarea)
     textarea.text(comment)
-    $j('#preview-tab a').text(show_text)
+    $j('#preview-tab a').text('Preview')
     $j('#html-editor button').show()
   }
-  toggleState = !toggleState
+  previewShowing = !previewShowing
 })
 
 var html_editor = '<div id="html-editor"><button style="display: block;" id="ed_strong" title="Bold">strong</button><button style="display: block;" id="ed_em" title="Italic">em</button><button style="display: block;" id="ed_link" title="Link">a[href=""]</button><button style="display: block;" id="ed_blockquote" title="Insert Quote">blockquote</button><button style="display: block;" title="Superscript" id="ed_sup">sup</button><button style="display: block;" title="Subscript" id="ed_sub">sub</button><button style="display: block;" title="Less-Than symbol" id="ed_lt">lt</button><button style="display: block;" title="Strikeout" id="ed_del">del</button><button style="display: block;" title="Underscore" id="ed_under">under</button><button style="display: block;" id="ed_code" title="Source Code">code</button><button style="display: block;" title="LaTeX code" id="ed_latex">latex</button><button style="display: block;" title="Insert Image"  id="ed_img">img[src=""]</button></div>'
